@@ -13,6 +13,8 @@ import {
   loadSections,
 } from '../../scripts/aem.js';
 
+import dynamicBlocks from '../dynamic/index.js';
+
 /**
  * Loads a fragment.
  * @param {string} path The path to the fragment
@@ -46,5 +48,9 @@ export default async function decorate(block) {
   const link = block.querySelector('a');
   const path = link ? link.getAttribute('href') : block.textContent.trim();
   const fragment = await loadFragment(path);
-  if (fragment) block.replaceChildren(...fragment.childNodes);
+  if (fragment) {
+    block.replaceChildren(...fragment.childNodes);
+    const main = document.querySelector('main');
+    if (main) await dynamicBlocks(main);
+  }
 }

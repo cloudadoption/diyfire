@@ -1,7 +1,5 @@
 .tabs {
   color: var(--text-color);
-  margin-block: var(--section-block-space);
-  padding-block: var(--space-l);
 }
 
 /* Full section width: break out of constrained content area */
