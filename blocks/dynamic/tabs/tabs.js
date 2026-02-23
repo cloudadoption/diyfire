@@ -1,0 +1,176 @@
+import { toClassName, loadCSS } from '../../../scripts/aem.js';
+
+let tabsStyleLoaded;
+
+function getTabDefinition(section, fallbackIdx = 0) {
+  const tabId = String(section.dataset?.tabId || '').trim();
+  if (!tabId) return null;
+
+  const title = String(section.dataset?.tabTitle || tabId).trim() || `Tab ${fallbackIdx + 1}`;
+  return {
+    id: toClassName(tabId) || `tab-${fallbackIdx + 1}`,
+    title,
+    section,
+  };
+}
+
+function collectTabSections(currSection) {
+  const tabDefs = [];
+  let next = currSection.nextElementSibling;
+
+  while (next?.classList.contains('section')) {
+    const tabDef = getTabDefinition(next, tabDefs.length);
+    if (!tabDef) break;
+    tabDefs.push(tabDef);
+    next = next.nextElementSibling;
+  }
+
+  return tabDefs;
+}
+
+function findTabGroups(main) {
+  const sections = [...main.querySelectorAll('.section[data-tab-id]')];
+  return sections.length ? [sections] : [];
+}
+
+function updateTabState(tabDefs, selectedId, tabButtons, tabPanels) {
+  tabDefs.forEach((tabDef) => {
+    const isSelected = tabDef.id === selectedId;
+    const button = tabButtons[tabDef.id];
+    const panel = tabPanels[tabDef.id];
+
+    if (button) {
+      button.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      button.classList.toggle('is-active', isSelected);
+    }
+
+    if (panel) {
+      panel.setAttribute('aria-hidden', isSelected ? 'false' : 'true');
+    }
+  });
+}
+
+function getSectionBackgroundUrl(section) {
+  const url = section?.dataset?.background || section?.dataset?.backgroundImage || '';
+  if (!url || typeof url !== 'string') return '';
+  try {
+    return new URL(url, window.location.href).href;
+  } catch {
+    return '';
+  }
+}
+
+function applyTabsBackground(tabsContainer, tabDef) {
+  const url = getSectionBackgroundUrl(tabDef?.section);
+  tabsContainer.classList.toggle('has-background', Boolean(url));
+  if (url) {
+    tabsContainer.style.backgroundImage = `url("${url.replace(/"/g, '%22')}")`;
+  } else {
+    tabsContainer.style.removeProperty('background-image');
+  }
+}
+
+function buildTabsUI(tabDefs, tabsContainer, sectionId = '') {
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const selectedId = tabDefs.find((tabDef) => tabDef.id === hash)?.id || tabDefs[0]?.id;
+
+  const tabsWrapper = document.createElement('div');
+  tabsWrapper.className = 'tabs-wrapper';
+
+  const tabList = document.createElement('div');
+  tabList.className = 'tabs-list';
+  tabList.setAttribute('role', 'tablist');
+  tabList.setAttribute('aria-orientation', 'horizontal');
+
+  const tabContent = document.createElement('div');
+  tabContent.className = 'tabs-content';
+
+  const tabButtons = {};
+  const tabPanels = {};
+
+  tabDefs.forEach((tabDef) => {
+    const baseId = `${tabDef.id}${sectionId ? `-${sectionId}` : ''}`;
+    const buttonId = `desktop-${baseId}`;
+    const panelId = `desktop-panel-${baseId}`;
+    const isSelected = tabDef.id === selectedId;
+
+    const button = document.createElement('button');
+    button.className = 'tabs-tab';
+    button.id = buttonId;
+    button.type = 'button';
+    button.role = 'tab';
+    button.setAttribute('aria-controls', panelId);
+    button.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+    button.classList.toggle('is-active', isSelected);
+    button.textContent = tabDef.title;
+
+    const panel = document.createElement('div');
+    panel.className = 'tab';
+    panel.id = panelId;
+    panel.role = 'tabpanel';
+    panel.setAttribute('aria-labelledby', buttonId);
+    panel.setAttribute('aria-hidden', isSelected ? 'false' : 'true');
+    panel.append(tabDef.section);
+
+    button.addEventListener('click', () => {
+      updateTabState(tabDefs, tabDef.id, tabButtons, tabPanels);
+      applyTabsBackground(tabsContainer, tabDef);
+      window.history.pushState({}, '', `${window.location.pathname}#${tabDef.id}`);
+    });
+
+    tabButtons[tabDef.id] = button;
+    tabPanels[tabDef.id] = panel;
+    tabList.append(button);
+    tabContent.append(panel);
+  });
+
+  const selectedTab = tabDefs.find((tabDef) => tabDef.id === selectedId) || tabDefs[0];
+  applyTabsBackground(tabsContainer, selectedTab);
+
+  tabsWrapper.append(tabList, tabContent);
+  return tabsWrapper;
+}
+
+function buildTabsFromSections(tabSections) {
+  if (!tabSections.length) return;
+  const first = tabSections[0];
+  const parent = first.parentNode;
+  if (!parent) return;
+
+  const tabDefs = tabSections
+    .map((section, index) => getTabDefinition(section, index))
+    .filter(Boolean);
+  if (!tabDefs.length) return;
+
+  tabDefs.forEach((def) => def.section.classList.remove('tabs'));
+
+  const tabsContainer = document.createElement('div');
+  tabsContainer.className = 'section tabs';
+  parent.insertBefore(tabsContainer, first);
+
+  const tabsUI = buildTabsUI(tabDefs, tabsContainer, first.id || '');
+  tabsContainer.append(tabsUI);
+}
+
+export default function decorate(block) {
+  const currSection = block.closest('.section');
+  if (!currSection) return;
+
+  const tabDefs = collectTabSections(currSection);
+  if (!tabDefs.length) return;
+
+  currSection.classList.add('tabs');
+  tabDefs.forEach((def) => def.section.classList.remove('tabs'));
+
+  const tabsUI = buildTabsUI(tabDefs, currSection, currSection.id || '');
+  block.replaceChildren(tabsUI);
+}
+
+export function createTabs(main) {
+  if (!main) return;
+  if (!tabsStyleLoaded) {
+    tabsStyleLoaded = loadCSS(`${window.hlx.codeBasePath}/blocks/dynamic/tabs/tabs.css`);
+  }
+  const tabGroups = findTabGroups(main);
+  tabGroups.forEach((group) => buildTabsFromSections(group));
+}
