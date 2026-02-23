@@ -13,14 +13,10 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
+import dynamicBlocks from '../blocks/dynamic/index.js';
 
 const isYoutubeLink = (url) => ['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname);
 
-/**
- * Replaces a paragraph wrapper with a block when safe.
- * @param {Element} link The original link element
- * @param {Element} block The block element
- */
 function replaceParagraphWithBlock(link, block) {
   const parent = link.parentElement;
   if (parent?.tagName === 'P' && parent.children.length === 1) {
@@ -30,10 +26,6 @@ function replaceParagraphWithBlock(link, block) {
   }
 }
 
-/**
- * Auto-converts YouTube links into embed blocks anywhere in main content.
- * @param {Element} main The container element
- */
 function buildEmbedBlocks(main) {
   const youtubeVideos = main.querySelectorAll('a[href*="youtube.com"], a[href*="youtu.be"]');
   youtubeVideos.forEach((anchor) => {
@@ -54,10 +46,6 @@ function buildEmbedBlocks(main) {
   });
 }
 
-/**
- * Builds hero block and prepends to main in a new section.
- * @param {Element} main The container element
- */
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
@@ -73,9 +61,6 @@ function buildHeroBlock(main) {
   }
 }
 
-/**
- * load fonts.css and set a session storage flag
- */
 async function loadFonts() {
   await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
   try {
@@ -85,10 +70,6 @@ async function loadFonts() {
   }
 }
 
-/**
- * Builds all synthetic blocks in a container element.
- * @param {Element} main The container element
- */
 function buildAutoBlocks(main) {
   try {
     // auto load `*/fragments/*` references
@@ -129,13 +110,8 @@ function loadErrorPage(main) {
   }
 }
 
-/**
- * Decorates the main element.
- * @param {Element} main The main element
- */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
-  // hopefully forward compatible button decoration
   decorateButtons(main);
   decorateIcons(main);
   buildAutoBlocks(main);
@@ -143,10 +119,6 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-/**
- * Loads everything needed to get to LCP.
- * @param {Element} doc The container element
- */
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
@@ -168,15 +140,13 @@ async function loadEager(doc) {
   }
 }
 
-/**
- * Loads everything that doesn't need to be delayed.
- * @param {Element} doc The container element
- */
 async function loadLazy(doc) {
   loadHeader(doc.querySelector('header'));
 
   const main = doc.querySelector('main');
   await loadSections(main);
+
+  await dynamicBlocks(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -209,10 +179,6 @@ async function loadLazy(doc) {
   }
 }
 
-/**
- * Loads everything that happens a lot later,
- * without impacting the user experience.
- */
 function loadDelayed() {
   // eslint-disable-next-line import/no-cycle
   window.setTimeout(() => import('./delayed.js'), 3000);
