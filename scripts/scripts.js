@@ -82,6 +82,7 @@ function buildAutoBlocks(main) {
             const { pathname } = new URL(fragment.href);
             const frag = await loadFragment(pathname);
             fragment.parentElement.replaceWith(...frag.children);
+            await dynamicBlocks(main);
           } catch (error) {
             // eslint-disable-next-line no-console
             console.error('Fragment loading failed', error);
@@ -145,7 +146,6 @@ async function loadLazy(doc) {
 
   const main = doc.querySelector('main');
   await loadSections(main);
-
   await dynamicBlocks(main);
 
   const { hash } = window.location;

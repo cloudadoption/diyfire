@@ -4,5 +4,5 @@ export default async function dynamicBlocks(main) {
   if (!hasTabSections) return;
 
   const { createTabs } = await import('../tabs/tabs.js');
-  createTabs(main);
+  await createTabs(main);
 }

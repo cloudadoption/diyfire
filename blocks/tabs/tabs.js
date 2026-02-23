@@ -167,11 +167,12 @@ export default function decorate(block) {
   block.replaceChildren(tabsUI);
 }
 
-export function createTabs(main) {
+export async function createTabs(main) {
   if (!main) return;
   if (!tabsStyleLoaded) {
     tabsStyleLoaded = loadCSS(`${window.hlx.codeBasePath}/blocks/tabs/tabs.css`);
   }
+  await tabsStyleLoaded;
   const tabGroups = findTabGroups(main);
   tabGroups.forEach((group) => buildTabsFromSections(group));
 }
