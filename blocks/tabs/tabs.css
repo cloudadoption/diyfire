@@ -1,3 +1,9 @@
+.tabs {
+  color: var(--text-color);
+  margin-block: var(--section-block-space);
+  padding-block: var(--space-l);
+}
+
 /* Full section width: break out of constrained content area */
 main .section.tabs,
 main .section .tabs {
@@ -5,12 +11,6 @@ main .section .tabs {
   max-width: none;
   margin-inline: calc(50% - 50vw);
   box-sizing: border-box;
-}
-
-.tabs {
-  color: var(--text-color);
-  margin-block: var(--section-block-space);
-  padding-block: var(--space-l);
 }
 
 .tabs a {
