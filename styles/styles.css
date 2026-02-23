@@ -343,6 +343,13 @@ button {
   white-space: nowrap;
 }
 
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
 /* Explicit primary variant (same as default button style) */
 a.button.primary:any-link,
 button.primary {
@@ -378,17 +385,6 @@ button.secondary {
   color: var(--text-color);
 }
 
-input,
-textarea,
-select,
-button {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
 /* main content area – use design tokens for rhythm */
 main > div {
   margin: var(--main-block-space) var(--content-padding-inline);
@@ -400,12 +396,6 @@ main img {
   height: auto;
 }
 
-/* Reserve space for unsized images to reduce CLS */
-main img:not([width]):not([height]) {
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
 .icon {
   display: inline-block;
   height: 24px;
@@ -415,6 +405,12 @@ main img:not([width]):not([height]) {
 .icon img {
   height: 100%;
   width: 100%;
+}
+
+/* Reserve space for unsized images to reduce CLS */
+main img:not([width], [height]) {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 /* sections – boilerplate structure with design tokens */
