@@ -29,7 +29,8 @@ function collectTabSections(currSection) {
 }
 
 function findTabGroups(main) {
-  const sections = [...main.querySelectorAll('.section[data-tab-id]')];
+  const sections = [...main.querySelectorAll('.section[data-tab-id]')]
+    .filter((s) => !s.closest('.tabs-wrapper'));
   return sections.length ? [sections] : [];
 }
 
