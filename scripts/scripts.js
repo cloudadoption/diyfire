@@ -1,5 +1,6 @@
 import {
   buildBlock,
+  decorateBlock,
   loadHeader,
   loadFooter,
   decorateButtons,
@@ -12,6 +13,46 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
+
+const isYoutubeLink = (url) => ['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname);
+
+/**
+ * Replaces a paragraph wrapper with a block when safe.
+ * @param {Element} link The original link element
+ * @param {Element} block The block element
+ */
+function replaceParagraphWithBlock(link, block) {
+  const parent = link.parentElement;
+  if (parent?.tagName === 'P' && parent.children.length === 1) {
+    parent.replaceWith(block);
+  } else {
+    link.replaceWith(block);
+  }
+}
+
+/**
+ * Auto-converts YouTube links into embed blocks anywhere in main content.
+ * @param {Element} main The container element
+ */
+function buildEmbedBlocks(main) {
+  const youtubeVideos = main.querySelectorAll('a[href*="youtube.com"], a[href*="youtu.be"]');
+  youtubeVideos.forEach((anchor) => {
+    if (anchor.closest('.embed.block')) return;
+    if (anchor.querySelector('.icon')) return;
+
+    let url;
+    try {
+      url = new URL(anchor.href);
+    } catch (e) {
+      return;
+    }
+    if (!isYoutubeLink(url)) return;
+
+    const block = buildBlock('embed', [[anchor.cloneNode(true)]]);
+    replaceParagraphWithBlock(anchor, block);
+    decorateBlock(block);
+  });
+}
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -69,6 +110,7 @@ function buildAutoBlocks(main) {
     }
 
     buildHeroBlock(main);
+    buildEmbedBlocks(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
