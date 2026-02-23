@@ -129,8 +129,7 @@ body.theme-light footer .footer > div > div:nth-child(4) ul .icon {
 
   footer .footer > div > div:nth-child(4) {
     grid-column: 2;
-    justify-self: end;
-    align-self: center;
+    place-self: center end;
   }
 }
 
