@@ -415,7 +415,7 @@ main img:not([width], [height]) {
 
 /* sections – boilerplate structure with design tokens */
 main > .section {
-  margin: var(--section-block-space) 0;
+  margin: inherit;
 }
 
 main > .section > div {
