@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 181.02 50">
+  <defs>
+    <linearGradient id="brandFlame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#98AEB8"/>
+      <stop offset="100%" stop-color="#516A77"/>
+    </linearGradient>
+    <linearGradient id="brandCore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5F9FB"/>
+      <stop offset="100%" stop-color="#C9D6DD"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="none">
+    <rect x="0" y="3" width="44" height="44" rx="12" fill="url(#brandFlame)"/>
+    <rect x="9" y="30" width="5" height="12" rx="1.5" fill="#D7E0E6" opacity="0.9"/>
+    <rect x="17" y="24" width="5" height="18" rx="1.5" fill="#D7E0E6" opacity="0.9"/>
+    <rect x="25" y="18" width="5" height="24" rx="1.5" fill="#D7E0E6" opacity="0.9"/>
+  </g>
+  <text x="52" y="39" font-family="'IBM Plex Sans', 'Trebuchet MS', sans-serif" font-size="30" font-weight="700" fill="#EAF1F4" letter-spacing="0.4">
+    <tspan fill="#ED2C38">diy</tspan><tspan dx="1.5" fill="#C4D3DB">FIRE</tspan>
+  </text>
+  <rect x="53" y="45" width="112" height="2.4" rx="1.2" fill="#5C7481" opacity="0.65"/>
+  <polygon fill="#ED2C38" points="177.2 19.58 177.2 19.58 177.2 19.58 181.02 16.13 179.94 15.74 180.57 12.86 178.22 13.62 177.91 12.3 176.11 15.26 176.74 10.07 175.67 10.79 174.35 8 173.03 10.79 171.96 10.07 172.59 15.26 170.79 12.3 170.48 13.62 168.13 12.86 168.76 15.74 167.68 16.13 171.5 19.58 170.86 21.44 174.3 20.96 174.24 25.19 174.66 25.19 174.6 20.99 177.83 21.44 177.2 19.58"/>
+</svg>
