@@ -1,9 +1,8 @@
-# Your Project's Title...
-Your project's description...
+Demo Project - Cloud Adoption
 
 ## Environments
-- Preview: https://main--{repo}--{owner}.aem.page/
-- Live: https://main--{repo}--{owner}.aem.live/
+- Preview: https://main--diyfire--cloudadoption.aem.page/
+- Live: https://main--diyfire--cloudadoption.aem.live/
 
 ## Documentation
 
