@@ -166,3 +166,54 @@ export function shuffle(arr) {
   }
   return next;
 }
+
+// ---------------------------------------------------------------------------
+// Chart.js (delayed load for CWV; reuse across calculators)
+// ---------------------------------------------------------------------------
+
+const CHART_JS_CDN = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+let chartJsLoadPromise = null;
+
+/**
+ * Load Chart.js from CDN in a deferred way (after idle) so it does not affect LCP/CWV.
+ * @returns {Promise<typeof window.Chart>}
+ */
+export function loadChartJs() {
+  if (typeof window.Chart !== 'undefined') return Promise.resolve(window.Chart);
+  if (chartJsLoadPromise) return chartJsLoadPromise;
+  chartJsLoadPromise = new Promise((resolve, reject) => {
+    const run = () => {
+      const script = document.createElement('script');
+      script.src = CHART_JS_CDN;
+      script.async = true;
+      script.onload = () => resolve(window.Chart);
+      script.onerror = () => reject(new Error('Chart.js failed to load'));
+      document.head.append(script);
+    };
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(run, { timeout: 2000 });
+    } else {
+      setTimeout(run, 1);
+    }
+  });
+  return chartJsLoadPromise;
+}
+
+/**
+ * Create or replace a Chart.js instance on a canvas.
+ * @param {HTMLCanvasElement} canvas
+ * @param {Object} config - Chart.js config (type, data, options)
+ * @returns {Object|undefined}
+ */
+export function createChart(canvas, config) {
+  if (!canvas || !config) return undefined;
+  const ChartLib = window.Chart;
+  if (!ChartLib) return undefined;
+  if (canvas.chart) {
+    canvas.chart.destroy();
+    canvas.chart = null;
+  }
+  const chart = new ChartLib(canvas, config);
+  canvas.chart = chart;
+  return chart;
+}
