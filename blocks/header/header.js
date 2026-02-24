@@ -3,6 +3,149 @@ import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
+const THEME_STORAGE_KEY = 'diyfire-theme';
+const THEME_CHANGE_EVENT = 'diyfire:themechange';
+
+function getThemePreference() {
+  const preferredTheme = document.documentElement.dataset.theme;
+  if (preferredTheme === 'light' || preferredTheme === 'dark') return preferredTheme;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  if (theme !== 'light' && theme !== 'dark') return;
+  document.documentElement.dataset.theme = theme;
+  document.body.classList.remove('light-scheme', 'dark-scheme');
+  document.body.classList.add(`${theme}-scheme`);
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch (e) {
+    // do nothing
+  }
+  window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
+}
+
+function bindToolAction(control, action, preventNavigation = false) {
+  if (!control) return;
+  control.addEventListener('click', (event) => {
+    if (preventNavigation) event.preventDefault();
+    action(event);
+  });
+  control.addEventListener('keydown', (event) => {
+    if (event.code === 'Enter' || event.code === 'Space') {
+      if (preventNavigation) event.preventDefault();
+      action(event);
+    }
+  });
+}
+
+function getToolControl(iconElement) {
+  const control = iconElement.closest('button, a, p, div, li');
+  if (!control) return null;
+  if (!['BUTTON', 'A'].includes(control.tagName)) {
+    control.setAttribute('role', 'button');
+    control.setAttribute('tabindex', '0');
+  }
+  return control;
+}
+
+function initThemeToggle(navTools) {
+  const icon = navTools.querySelector('.icon-toggle');
+  if (!icon) return;
+  const toggle = getToolControl(icon);
+  if (!toggle) return;
+
+  toggle.classList.add('nav-tool-control', 'nav-theme-toggle');
+  const syncToggleState = () => {
+    const currentTheme = getThemePreference();
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    toggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+    toggle.setAttribute('title', `Switch to ${nextTheme} mode`);
+    toggle.setAttribute('aria-pressed', currentTheme === 'dark' ? 'true' : 'false');
+  };
+
+  bindToolAction(toggle, () => {
+    const nextTheme = getThemePreference() === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+  }, toggle.tagName === 'A');
+
+  window.addEventListener(THEME_CHANGE_EVENT, syncToggleState);
+  syncToggleState();
+}
+
+function initSearchControl(navTools) {
+  const icon = navTools.querySelector('.icon-search');
+  if (!icon) return;
+  const control = getToolControl(icon);
+  if (!control) return;
+
+  control.classList.add('nav-tool-control', 'nav-search-toggle');
+  control.setAttribute('aria-label', 'Search');
+  control.setAttribute('title', 'Search');
+  const searchHref = control.tagName === 'A' ? control.getAttribute('href') : '/search';
+
+  if (control.tagName !== 'A') {
+    bindToolAction(control, () => {
+      window.location.href = searchHref || '/search';
+    });
+  }
+}
+
+function findLanguageMenu(navTools, globeControl) {
+  let startNode = globeControl;
+  while (startNode && startNode !== navTools) {
+    let current = startNode;
+    while (current?.nextElementSibling) {
+      current = current.nextElementSibling;
+      if (current.tagName === 'UL') return current;
+    }
+    startNode = startNode.parentElement;
+  }
+  return null;
+}
+
+function initLanguagePicker(navTools) {
+  const globeIcon = navTools.querySelector('.icon-globe');
+  if (!globeIcon) return;
+  const globeControl = getToolControl(globeIcon);
+  if (!globeControl) return;
+
+  const languageMenu = findLanguageMenu(navTools, globeControl);
+  if (!languageMenu) return;
+
+  navTools.classList.add('has-language-picker');
+  globeControl.classList.add('nav-tool-control', 'nav-language-toggle');
+  globeControl.setAttribute('aria-haspopup', 'true');
+  globeControl.setAttribute('aria-expanded', 'false');
+  globeControl.setAttribute('aria-label', 'Select language');
+  globeControl.setAttribute('title', 'Select language');
+
+  languageMenu.classList.add('nav-language-menu');
+  languageMenu.hidden = true;
+
+  const closeLanguageMenu = () => {
+    languageMenu.hidden = true;
+    globeControl.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleLanguageMenu = (event) => {
+    if (globeControl.tagName === 'A') event.preventDefault();
+    const isExpanded = globeControl.getAttribute('aria-expanded') === 'true';
+    languageMenu.hidden = isExpanded;
+    globeControl.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+  };
+
+  bindToolAction(globeControl, toggleLanguageMenu, globeControl.tagName === 'A');
+  document.addEventListener('click', (event) => {
+    if (!navTools.contains(event.target)) closeLanguageMenu();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.code === 'Escape') closeLanguageMenu();
+  });
+  languageMenu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => closeLanguageMenu());
+  });
+}
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
@@ -130,6 +273,17 @@ export default async function decorate(block) {
     if (section) section.classList.add(`nav-${c}`);
   });
 
+  // Merge any extra nav wrappers (introduced by additional separators) into tools.
+  const navTools = nav.querySelector('.nav-tools');
+  if (navTools && nav.children.length > 3) {
+    [...nav.children].slice(3).forEach((extraSection) => {
+      while (extraSection.firstElementChild) {
+        navTools.append(extraSection.firstElementChild);
+      }
+      extraSection.remove();
+    });
+  }
+
   const navBrand = nav.querySelector('.nav-brand');
   const brandLink = navBrand.querySelector('.button');
   if (brandLink) {
@@ -168,4 +322,11 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  const navToolsSection = nav.querySelector('.nav-tools');
+  if (navToolsSection) {
+    initThemeToggle(navToolsSection);
+    initSearchControl(navToolsSection);
+    initLanguagePicker(navToolsSection);
+  }
 }

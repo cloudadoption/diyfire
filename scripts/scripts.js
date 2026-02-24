@@ -16,6 +16,20 @@ import {
 } from './aem.js';
 import dynamicBlocks from '../blocks/dynamic/index.js';
 
+const THEME_STORAGE_KEY = 'diyfire-theme';
+
+function applyStoredThemePreference() {
+  try {
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (storedTheme !== 'light' && storedTheme !== 'dark') return;
+    document.documentElement.dataset.theme = storedTheme;
+    document.body.classList.remove('light-scheme', 'dark-scheme');
+    document.body.classList.add(`${storedTheme}-scheme`);
+  } catch (e) {
+    // do nothing
+  }
+}
+
 const isYoutubeLink = (url) => ['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname);
 
 function replaceParagraphWithBlock(link, block) {
@@ -140,6 +154,7 @@ async function loadTemplate(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+  applyStoredThemePreference();
   const main = doc.querySelector('main');
   if (main) {
     if (window.isErrorPage) loadErrorPage(main);

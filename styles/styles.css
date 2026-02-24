@@ -136,6 +136,14 @@
   --link-hover-color: var(--color-link-hover);
 }
 
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
 @media (width >= 600px) {
   :root {
     --content-padding-inline: var(--space-l);
