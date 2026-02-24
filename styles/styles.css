@@ -460,6 +460,7 @@ main img:not([width], [height]) {
 /* sections – boilerplate structure with design tokens */
 main > .section {
   margin: inherit;
+
   /* Reduce CLS: contain layout so section appearance causes less reflow.
      Exclude social-share section: contain creates a containing block for position:fixed,
      which would break the sticky share buttons. */
