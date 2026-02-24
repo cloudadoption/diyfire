@@ -1,4 +1,4 @@
-import { toCamelCase, toClassName } from '../../scripts/aem.js';
+import { toCamelCase, toClassName, buildBlock, decorateBlock, loadBlock } from '../../scripts/aem.js';
 
 /**
  * Creates an HTML element with an optional class name
@@ -460,6 +460,72 @@ function generatePayload(form) {
 }
 
 /**
+ * Normalizes confirmation path to a same-origin path for fragment loading.
+ * @param {string} raw - Raw path or URL from form config
+ * @returns {string|null} Normalized path (e.g. /thank-you) or null if invalid
+ */
+function normalizeConfirmationPath(raw) {
+  if (typeof raw !== 'string') return null;
+  let path = raw.trim();
+  if (!path) return null;
+
+  try {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      const url = new URL(path);
+      if (url.origin !== window.location.origin) return null;
+      path = url.pathname;
+    }
+  } catch {
+    return null;
+  }
+
+  if (!path.startsWith('/') || path.startsWith('//')) return null;
+  return path;
+}
+
+/**
+ * Replaces the form block with thank you content from the confirmation path.
+ * Uses the fragment block to load and decorate the content. Only replaces on success;
+ * the form stays visible if the fragment fails to load.
+ * @param {HTMLFormElement} form - Form element
+ * @param {string} confirmationPath - Path to thank you page (e.g. /thank-you)
+ * @returns {Promise<boolean>} True if replacement succeeded
+ */
+async function replaceWithThankYou(form, confirmationPath) {
+  const path = normalizeConfirmationPath(confirmationPath);
+  if (!path) return false;
+
+  const block = form.closest('.block');
+  if (!block) return false;
+
+  const link = document.createElement('a');
+  link.href = path;
+
+  const fragmentBlock = buildBlock('fragment', [[link]]);
+  const tmp = document.createElement('div');
+  tmp.setAttribute('hidden', '');
+  tmp.appendChild(fragmentBlock);
+  document.body.appendChild(tmp);
+
+  try {
+    decorateBlock(fragmentBlock);
+    await loadBlock(fragmentBlock);
+
+    const hasContent = fragmentBlock.querySelector('.section');
+    if (hasContent) {
+      block.replaceChildren(...fragmentBlock.childNodes);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Failed to load thank you fragment:', path, error);
+    return false;
+  } finally {
+    tmp.remove();
+  }
+}
+
+/**
  * Handles form submission
  * @param {HTMLFormElement} form - Form element to submit
  * @returns {Promise<void>}
@@ -485,7 +551,11 @@ async function handleSubmit(form) {
 
     if (response.ok) {
       if (form.dataset.confirmation) {
-        window.location.href = form.dataset.confirmation;
+        const replaced = await replaceWithThankYou(form, form.dataset.confirmation);
+        if (!replaced) {
+          setStatus('Thanks! Your message has been sent.');
+          form.reset();
+        }
       } else {
         setStatus('Thanks! Your message has been sent.');
         form.reset();
@@ -496,7 +566,7 @@ async function handleSubmit(form) {
     }
   } catch (error) {
     setStatus('Unable to submit right now. Please try again.');
-     
+
     console.error(error);
   } finally {
     toggleForm(form, false);

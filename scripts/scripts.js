@@ -71,10 +71,20 @@ async function loadFonts() {
   }
 }
 
+/** Hash that opts out of fragment auto-blocking (do not block). Links with #_dnb stay as normal links. */
+const DNB_HASH = '#_dnb';
+
 function buildAutoBlocks(main) {
   try {
-    // auto load `*/fragments/*` references
-    const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
+    // auto load `*/fragments/*` references (exclude #_dnb = do not auto-block)
+    const allFragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
+    const fragments = allFragments.filter((a) => {
+      if (a.href.includes(DNB_HASH)) {
+        a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
+        return false;
+      }
+      return true;
+    });
     if (fragments.length > 0) {
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
         fragments.forEach(async (fragment) => {
@@ -84,7 +94,7 @@ function buildAutoBlocks(main) {
             fragment.parentElement.replaceWith(...frag.children);
             await dynamicBlocks(main);
           } catch (error) {
-             
+
             console.error('Fragment loading failed', error);
           }
         });

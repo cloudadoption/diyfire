@@ -15,10 +15,11 @@ main .form-container .form-wrapper {
 main .form form {
   display: grid;
   gap: var(--space-s);
-  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border: 1px solid currentColor;
   border-radius: 12px;
   padding: var(--space-m);
-  background: light-dark(var(--color-light), var(--color-gray-900));
+  background: transparent;
+  color: inherit;
   min-width: 0;
   max-width: 100%;
 }
@@ -43,10 +44,10 @@ main .form form {
   scroll-margin: 1em;
   width: 100%;
   min-width: 0;
-  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border: 1px solid currentColor;
   border-radius: 8px;
   padding: 10px 12px;
-  background: light-dark(var(--color-light), var(--color-gray-900));
+  background: transparent;
   color: inherit;
   font-size: var(--body-font-size-s);
 }
@@ -66,7 +67,7 @@ main .form form {
 .form input:hover,
 .form textarea:hover,
 .form select:hover {
-  border-color: light-dark(var(--color-gray-500), var(--color-gray-400));
+  opacity: 0.9;
 }
 
 .form input:focus,
@@ -82,9 +83,9 @@ main .form form {
 .form input[readonly],
 .form textarea[readonly],
 .form select[readonly] {
-  border-color: light-dark(var(--color-gray-200), var(--color-gray-600));
-  background: light-dark(var(--color-gray-100), var(--color-gray-800));
-  color: light-dark(var(--color-gray-600), var(--color-gray-400));
+  opacity: 0.6;
+  background: transparent;
+  color: inherit;
 }
 
 .form input[type='checkbox'],
@@ -108,7 +109,7 @@ main .form form {
 .form legend[data-required]::after {
   content: '*';
   margin-left: 0.25ch;
-  color: var(--color-red-500);
+  color: inherit;
 }
 
 .form .form-field + .form-field {
@@ -173,9 +174,10 @@ main .form form {
   width: calc(2em + 2px);
   height: calc(1em + 2px);
   border-radius: 1em;
-  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
-  background: light-dark(var(--color-gray-300), var(--color-gray-600));
-  transition: background-color 0.2s;
+  border: 1px solid currentColor;
+  background: currentColor;
+  opacity: 0.4;
+  transition: opacity 0.2s;
   cursor: pointer;
 }
 
@@ -188,13 +190,12 @@ main .form form {
   width: 1em;
   height: 1em;
   border-radius: 50%;
-  background: var(--background-color);
+  background: inherit;
   transition: left 0.2s;
 }
 
 .form .form-field.toggle-field label input:checked + span {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  opacity: 1;
 }
 
 .form .form-field.toggle-field label input:checked + span::after {
@@ -203,14 +204,16 @@ main .form form {
 
 .form .field-help-text {
   margin-top: 0.2em;
-  color: light-dark(var(--color-gray-600), var(--color-gray-400));
+  color: inherit;
+  opacity: 0.8;
   font-size: var(--body-font-size-xs);
 }
 
 .form .form-status {
   margin: var(--space-s) 0 0;
   font-size: var(--body-font-size-s);
-  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  color: inherit;
+  opacity: 0.9;
 }
 
 /* Buttons – primary submit, secondary reset */
@@ -235,31 +238,27 @@ main .form form {
 }
 
 .form .button-wrapper button.button:not(.secondary) {
-  border: 1px solid var(--color-accent);
-  background: var(--color-accent);
-  color: #fff;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
 }
 
 .form .button-wrapper button.button:disabled,
 .form .button-wrapper button.button:hover:disabled {
-  border-color: light-dark(var(--color-gray-300), var(--color-gray-600));
-  background: light-dark(var(--color-gray-200), var(--color-gray-700));
-  color: light-dark(var(--color-gray-500), var(--color-gray-400));
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .form .button-wrapper button.button:not(.secondary):hover {
-  background: light-dark(var(--color-blue-600), var(--color-blue-400));
-  border-color: light-dark(var(--color-blue-600), var(--color-blue-400));
+  opacity: 0.9;
 }
 
 .form .button-wrapper button.button.secondary {
-  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-600));
+  border: 1px solid currentColor;
   background: transparent;
   color: inherit;
 }
 
 .form .button-wrapper button.button.secondary:hover {
-  border-color: light-dark(var(--color-gray-500), var(--color-gray-400));
-  background: light-dark(var(--color-gray-100), var(--color-gray-800));
+  opacity: 0.9;
 }
