@@ -50,7 +50,7 @@ function buildEmbedBlocks(main) {
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
-  // eslint-disable-next-line no-bitwise
+   
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     // Check if h1 or picture is already inside a hero block
     if (h1.closest('.hero') || picture.closest('.hero')) {
@@ -76,7 +76,6 @@ function buildAutoBlocks(main) {
     // auto load `*/fragments/*` references
     const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
     if (fragments.length > 0) {
-      // eslint-disable-next-line import/no-cycle
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
         fragments.forEach(async (fragment) => {
           try {
@@ -85,7 +84,7 @@ function buildAutoBlocks(main) {
             fragment.parentElement.replaceWith(...frag.children);
             await dynamicBlocks(main);
           } catch (error) {
-            // eslint-disable-next-line no-console
+             
             console.error('Fragment loading failed', error);
           }
         });
@@ -95,7 +94,7 @@ function buildAutoBlocks(main) {
     buildHeroBlock(main);
     buildEmbedBlocks(main);
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.error('Auto Blocking failed', error);
   }
 }
@@ -112,7 +111,6 @@ function loadErrorPage(main) {
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
@@ -132,7 +130,7 @@ async function loadTemplate(main) {
       }
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.error('template loading failed', error);
   }
 }
@@ -179,7 +177,6 @@ async function loadLazy(doc) {
   loadFonts();
 
   const loadQuickEdit = async (...args) => {
-    // eslint-disable-next-line import/no-cycle
     const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
     initQuickEdit(...args);
   };
@@ -201,7 +198,6 @@ async function loadLazy(doc) {
 }
 
 function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
   window.setTimeout(() => import('./delayed.js'), 3000);
   // load anything that can be postponed to the latest here
 }

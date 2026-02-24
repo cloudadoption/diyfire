@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { createTag } from '../../scripts/shared.js';
 
 const DEFAULTS = {
