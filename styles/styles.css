@@ -468,6 +468,15 @@ main img:not([width], [height]) {
 /* sections – boilerplate structure with design tokens */
 main > .section {
   margin: inherit;
+
+  /* Reduce CLS: contain layout so section appearance causes less reflow.
+     Exclude social-share section: contain creates a containing block for position:fixed,
+     which would break the sticky share buttons. */
+  contain: layout;
+}
+
+main > .section:has(.social-share) {
+  contain: none;
 }
 
 main > .section > div {
@@ -482,4 +491,18 @@ main .section.highlight {
   background-color: var(--light-color);
   margin: 0;
   padding: var(--section-block-space) 0;
+}
+
+/* section-metadata style=divider: content-width (grid) border-bottom */
+main > .section.divider {
+  position: relative;
+}
+
+main > .section.divider::after {
+  content: '';
+  display: block;
+  max-width: var(--grid-container-width);
+  padding: 12px 0 24px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--color-gray-200);
 }

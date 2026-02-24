@@ -6,7 +6,6 @@
  * @returns {Element}
  */
 
-// eslint-disable-next-line import/prefer-default-export
 export function createTag(tag, attributes = {}, content = null) {
   const el = document.createElement(tag);
 
@@ -154,6 +153,49 @@ export function pathFromHref(href, base = typeof window !== 'undefined' ? window
 }
 
 /**
+ * Get authored link paths from block (list of a[href] → { path, title }).
+ * Skips when block has config-style rows (2+ cells).
+ * @param {Element} block - Block element
+ * @returns {Array<{ path: string, title: string }>}
+ */
+export function getAuthoredLinks(block) {
+  const rows = block.querySelectorAll(':scope > div');
+  const hasConfigRows = [...rows].some((row) => row.children.length >= 2);
+  if (hasConfigRows) return [];
+
+  const anchors = block.querySelectorAll('a[href]');
+  if (!anchors.length) return [];
+
+  return [...anchors].map((a) => {
+    const path = pathFromHref(a.href);
+    const rawTitle = (a.textContent || '').trim();
+    const looksLikeUrl = /^https?:\/\//i.test(rawTitle) || rawTitle.length > 80;
+    const title = looksLikeUrl ? '' : rawTitle;
+    return { path, title };
+  }).filter((item) => item.path && item.path !== '/');
+}
+
+/**
+ * Resolve authored links with metadata from query index.
+ * @param {Array<{ path: string, title: string }>} authoredLinks
+ * @param {Array} indexRows - Query index data
+ * @returns {Array<{ path, title, description, date? }>}
+ */
+export function resolveArticlesFromIndex(authoredLinks, indexRows) {
+  return authoredLinks.map(({ path, title: linkTitle }) => {
+    const norm = normalizePath(path);
+    const row = indexRows.find((r) => r?.path && normalizePath(r.path) === norm);
+    const fallbackTitle = norm.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') || norm;
+    return {
+      path: norm,
+      title: row?.title?.trim() || linkTitle || fallbackTitle,
+      description: row?.description?.trim() || '',
+      date: row?.date || row?.publisheddate || row?.lastModified,
+    };
+  });
+}
+
+/**
  * Shuffle array (Fisher–Yates). Returns new array.
  * @param {Array} arr - Input array
  * @returns {Array}
@@ -165,4 +207,55 @@ export function shuffle(arr) {
     [next[i], next[j]] = [next[j], next[i]];
   }
   return next;
+}
+
+// ---------------------------------------------------------------------------
+// Chart.js (delayed load for CWV; reuse across calculators)
+// ---------------------------------------------------------------------------
+
+const CHART_JS_CDN = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+let chartJsLoadPromise = null;
+
+/**
+ * Load Chart.js from CDN in a deferred way (after idle) so it does not affect LCP/CWV.
+ * @returns {Promise<typeof window.Chart>}
+ */
+export function loadChartJs() {
+  if (typeof window.Chart !== 'undefined') return Promise.resolve(window.Chart);
+  if (chartJsLoadPromise) return chartJsLoadPromise;
+  chartJsLoadPromise = new Promise((resolve, reject) => {
+    const run = () => {
+      const script = document.createElement('script');
+      script.src = CHART_JS_CDN;
+      script.async = true;
+      script.onload = () => resolve(window.Chart);
+      script.onerror = () => reject(new Error('Chart.js failed to load'));
+      document.head.append(script);
+    };
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(run, { timeout: 2000 });
+    } else {
+      setTimeout(run, 1);
+    }
+  });
+  return chartJsLoadPromise;
+}
+
+/**
+ * Create or replace a Chart.js instance on a canvas.
+ * @param {HTMLCanvasElement} canvas
+ * @param {Object} config - Chart.js config (type, data, options)
+ * @returns {Object|undefined}
+ */
+export function createChart(canvas, config) {
+  if (!canvas || !config) return undefined;
+  const ChartLib = window.Chart;
+  if (!ChartLib) return undefined;
+  if (canvas.chart) {
+    canvas.chart.destroy();
+    canvas.chart = null;
+  }
+  const chart = new ChartLib(canvas, config);
+  canvas.chart = chart;
+  return chart;
 }

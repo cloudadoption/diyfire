@@ -10,7 +10,7 @@ import {
   decorateTemplateAndTheme,
   waitForFirstImage,
   loadSection,
-  loadSections,
+  sampleRUM,
   loadCSS,
   getMetadata,
 } from './aem.js';
@@ -64,7 +64,7 @@ function buildEmbedBlocks(main) {
 function buildHeroBlock(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
-  // eslint-disable-next-line no-bitwise
+   
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     // Check if h1 or picture is already inside a hero block
     if (h1.closest('.hero') || picture.closest('.hero')) {
@@ -85,12 +85,21 @@ async function loadFonts() {
   }
 }
 
+/** Hash that opts out of fragment auto-blocking (do not block). Links with #_dnb stay as normal links. */
+const DNB_HASH = '#_dnb';
+
 function buildAutoBlocks(main) {
   try {
-    // auto load `*/fragments/*` references
-    const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
+    // auto load `*/fragments/*` references (exclude #_dnb = do not auto-block)
+    const allFragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
+    const fragments = allFragments.filter((a) => {
+      if (a.href.includes(DNB_HASH)) {
+        a.href = a.href.replace(DNB_HASH, '').replace(/#$/, '');
+        return false;
+      }
+      return true;
+    });
     if (fragments.length > 0) {
-      // eslint-disable-next-line import/no-cycle
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
         fragments.forEach(async (fragment) => {
           try {
@@ -99,7 +108,7 @@ function buildAutoBlocks(main) {
             fragment.parentElement.replaceWith(...frag.children);
             await dynamicBlocks(main);
           } catch (error) {
-            // eslint-disable-next-line no-console
+
             console.error('Fragment loading failed', error);
           }
         });
@@ -109,7 +118,7 @@ function buildAutoBlocks(main) {
     buildHeroBlock(main);
     buildEmbedBlocks(main);
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.error('Auto Blocking failed', error);
   }
 }
@@ -126,7 +135,6 @@ function loadErrorPage(main) {
   }
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
   decorateButtons(main);
   decorateIcons(main);
@@ -146,7 +154,7 @@ async function loadTemplate(main) {
       }
     }
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.error('template loading failed', error);
   }
 }
@@ -181,7 +189,9 @@ async function loadLazy(doc) {
   }
 
   const main = doc.querySelector('main');
-  await loadSections(main);
+  const sections = main ? [...main.querySelectorAll('div.section')] : [];
+  await Promise.all(sections.map((s) => loadSection(s)));
+  if (sections[0] && sampleRUM.enhance) sampleRUM.enhance();
   await dynamicBlocks(main);
 
   const { hash } = window.location;
@@ -194,7 +204,6 @@ async function loadLazy(doc) {
   loadFonts();
 
   const loadQuickEdit = async (...args) => {
-    // eslint-disable-next-line import/no-cycle
     const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
     initQuickEdit(...args);
   };
@@ -216,7 +225,6 @@ async function loadLazy(doc) {
 }
 
 function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
   window.setTimeout(() => import('./delayed.js'), 3000);
   // load anything that can be postponed to the latest here
 }

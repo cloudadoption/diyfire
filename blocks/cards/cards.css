@@ -92,3 +92,10 @@
     padding: var(--space-l);
   }
 }
+
+/* Links variant empty state */
+.cards .cards-links-empty {
+  margin: 0;
+  padding: var(--space-m);
+  color: light-dark(var(--color-gray-600), var(--color-gray-400));
+}
