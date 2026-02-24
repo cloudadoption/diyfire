@@ -79,15 +79,47 @@ function initSearchControl(navTools) {
   const control = getToolControl(icon);
   if (!control) return;
 
-  control.classList.add('nav-tool-control', 'nav-search-toggle');
-  control.setAttribute('aria-label', 'Search');
-  control.setAttribute('title', 'Search');
   const searchHref = control.tagName === 'A' ? control.getAttribute('href') : '/search';
+  const searchPath = searchHref || '/search';
+  const searchQuery = new URLSearchParams(window.location.search).get('q') || '';
 
-  if (control.tagName !== 'A') {
-    bindToolAction(control, () => {
-      window.location.href = searchHref || '/search';
-    });
+  const form = document.createElement('form');
+  form.className = 'nav-search-form';
+  form.setAttribute('role', 'search');
+  form.setAttribute('action', searchPath);
+  form.setAttribute('method', 'get');
+  form.setAttribute('aria-label', 'Site search');
+
+  const input = document.createElement('input');
+  input.className = 'nav-search-input';
+  input.setAttribute('type', 'search');
+  input.setAttribute('name', 'q');
+  input.setAttribute('placeholder', 'Search');
+  input.setAttribute('aria-label', 'Search');
+  input.setAttribute('autocomplete', 'off');
+  if (searchQuery) input.value = searchQuery;
+
+  const submit = document.createElement('button');
+  submit.className = 'nav-tool-control nav-search-submit';
+  submit.setAttribute('type', 'submit');
+  submit.setAttribute('aria-label', 'Search');
+  submit.setAttribute('title', 'Search');
+  submit.append(icon.cloneNode(true));
+
+  form.addEventListener('submit', (event) => {
+    if (!input.value.trim()) {
+      event.preventDefault();
+      window.location.href = searchPath;
+    }
+  });
+
+  form.append(input, submit);
+
+  const buttonContainer = control.closest('.button-container');
+  if (buttonContainer && buttonContainer.children.length === 1) {
+    buttonContainer.replaceWith(form);
+  } else {
+    control.replaceWith(form);
   }
 }
 
@@ -102,6 +134,21 @@ function findLanguageMenu(navTools, globeControl) {
     startNode = startNode.parentElement;
   }
   return null;
+}
+
+function closeLanguagePicker(nav) {
+  const languageToggle = nav?.querySelector('.nav-language-toggle');
+  const languageMenu = nav?.querySelector('.nav-language-menu');
+  if (languageMenu) languageMenu.hidden = true;
+  if (languageToggle) languageToggle.setAttribute('aria-expanded', 'false');
+}
+
+function closeDesktopNavSections(nav) {
+  const navSections = nav?.querySelector('.nav-sections');
+  if (!navSections) return;
+  navSections.querySelectorAll('.nav-sections .default-content-wrapper > ul > li').forEach((section) => {
+    section.setAttribute('aria-expanded', 'false');
+  });
 }
 
 function initLanguagePicker(navTools) {
@@ -131,6 +178,8 @@ function initLanguagePicker(navTools) {
   const toggleLanguageMenu = (event) => {
     if (globeControl.tagName === 'A') event.preventDefault();
     const isExpanded = globeControl.getAttribute('aria-expanded') === 'true';
+    const nav = navTools.closest('nav');
+    if (!isExpanded) closeDesktopNavSections(nav);
     languageMenu.hidden = isExpanded;
     globeControl.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
   };
@@ -145,6 +194,84 @@ function initLanguagePicker(navTools) {
   languageMenu.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => closeLanguageMenu());
   });
+}
+
+function isPromoMenuItem(item) {
+  return !!item.querySelector('picture, img');
+}
+
+function decorateMegaMenuSection(navSection) {
+  const sectionLink = navSection.querySelector(':scope > p > a');
+  const submenu = navSection.querySelector(':scope > ul');
+  if (!sectionLink || !submenu) return;
+
+  const isExplicitMega = sectionLink.hash === '#mega';
+  if (isExplicitMega) {
+    const cleanHref = sectionLink.href.replace(/#mega$/i, '');
+    sectionLink.href = cleanHref;
+  }
+
+  const submenuItems = [...submenu.children].filter((item) => item.tagName === 'LI');
+  const promoItem = submenuItems.find((item) => isPromoMenuItem(item));
+  if (!isExplicitMega && !promoItem) return;
+
+  navSection.classList.add('nav-drop-mega');
+  submenu.classList.add('nav-mega-menu');
+  const trigger = navSection.querySelector(':scope > p');
+  const linkItems = submenuItems.filter((item) => item !== promoItem);
+  const headingItems = linkItems.filter((item) => !item.querySelector('a'));
+
+  let groupIndex = 0;
+  linkItems.forEach((item) => {
+    const itemLink = item.querySelector('a');
+    if (!itemLink) {
+      groupIndex += 1;
+      item.classList.add('nav-mega-group-heading');
+      item.style.setProperty('--mega-group', String(groupIndex));
+      return;
+    }
+
+    if (groupIndex === 0) groupIndex = 1;
+    item.classList.add('nav-mega-group-item');
+    item.style.setProperty('--mega-group', String(groupIndex));
+  });
+
+  const hasGroups = headingItems.length > 0;
+  const groupCount = hasGroups ? groupIndex : 1;
+  if (hasGroups) submenu.classList.add('nav-mega-has-groups');
+
+  const groupRowMap = {};
+  linkItems.forEach((item) => {
+    const itemGroup = Number(item.style.getPropertyValue('--mega-group')) || 1;
+    groupRowMap[itemGroup] = (groupRowMap[itemGroup] || 0) + 1;
+    item.style.setProperty('--mega-row', String(groupRowMap[itemGroup]));
+  });
+
+  if (promoItem) {
+    promoItem.classList.add('nav-mega-promo');
+    promoItem.style.setProperty('--mega-group', String(groupCount + 1));
+    submenu.append(promoItem);
+    submenu.style.setProperty('--mega-columns', String(groupCount + 1));
+  } else {
+    submenu.style.setProperty('--mega-columns', String(groupCount));
+  }
+
+  const syncMegaPanelPosition = () => {
+    if (!document.body.contains(navSection)) return;
+    if (!trigger) return;
+    submenu.style.setProperty('--mega-offset-x', '0px');
+    const panelRect = submenu.getBoundingClientRect();
+    const targetLeft = (window.innerWidth - panelRect.width) / 2;
+    const correctedOffset = targetLeft - panelRect.left;
+    submenu.style.setProperty('--mega-offset-x', `${Math.round(correctedOffset)}px`);
+
+    const triggerRect = trigger.getBoundingClientRect();
+    const pointerX = triggerRect.left + (triggerRect.width / 2) - targetLeft;
+    submenu.style.setProperty('--mega-pointer-x', `${Math.round(pointerX)}px`);
+  };
+
+  navSection.megaSyncPosition = syncMegaPanelPosition;
+  window.addEventListener('resize', syncMegaPanelPosition);
 }
 
 function closeOnEscape(e) {
@@ -183,7 +310,7 @@ function closeOnFocusLost(e) {
 
 function openOnKeydown(e) {
   const focused = document.activeElement;
-  const isNavDrop = focused.className === 'nav-drop';
+  const isNavDrop = focused.classList.contains('nav-drop');
   if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
     const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
     // eslint-disable-next-line no-use-before-define
@@ -294,9 +421,26 @@ export default async function decorate(block) {
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
-      if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
+      if (navSection.querySelector('ul')) {
+        navSection.classList.add('nav-drop');
+        decorateMegaMenuSection(navSection);
+        const topLevelLink = navSection.querySelector(':scope > p > a');
+        if (topLevelLink) {
+          topLevelLink.addEventListener('click', (event) => {
+            if (!isDesktop.matches) return;
+            const expanded = navSection.getAttribute('aria-expanded') === 'true';
+            if (!expanded) {
+              if (navSection.megaSyncPosition) navSection.megaSyncPosition();
+              event.preventDefault();
+              toggleAllNavSections(navSections);
+              navSection.setAttribute('aria-expanded', 'true');
+            }
+          });
+        }
+      }
       navSection.addEventListener('click', () => {
         if (isDesktop.matches) {
+          closeLanguagePicker(navSection.closest('nav'));
           const expanded = navSection.getAttribute('aria-expanded') === 'true';
           toggleAllNavSections(navSections);
           navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
@@ -322,6 +466,10 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  nav.querySelectorAll('.nav-drop-mega').forEach((section) => {
+    if (section.megaSyncPosition) section.megaSyncPosition();
+  });
 
   const navToolsSection = nav.querySelector('.nav-tools');
   if (navToolsSection) {

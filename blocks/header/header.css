@@ -177,6 +177,26 @@ header nav .nav-sections ul > li {
   font-weight: 500;
 }
 
+header nav .nav-sections a.button:any-link,
+header nav .nav-sections button.button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-color);
+  padding: 0;
+  min-width: 0;
+  font-weight: 600;
+}
+
+header nav .nav-sections a.button:any-link:hover,
+header nav .nav-sections a.button:any-link:focus-visible,
+header nav .nav-sections button.button:hover,
+header nav .nav-sections button.button:focus-visible {
+  background: transparent;
+  color: var(--dark-color);
+  text-decoration: none;
+}
+
 header nav .nav-sections ul > li > ul {
   margin-top: 0;
 }
@@ -228,6 +248,21 @@ header nav .nav-sections ul > li > ul > li {
     display: flex;
     gap: 24px;
     margin: 0;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > p {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--nav-height);
+    font-size: var(--body-font-size-xl);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > p > a {
+    color: inherit;
+    text-decoration: none;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
@@ -301,6 +336,112 @@ header nav .nav-sections ul > li > ul > li {
     background-color: var(--light-color);
     text-decoration: none;
   }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul {
+    display: grid;
+    left: 0;
+    transform: translate(var(--mega-offset-x, 0), -6px);
+    width: min(920px, calc(100vw - 40px));
+    max-width: 920px;
+    grid-template-columns: repeat(var(--mega-columns, 2), minmax(220px, 1fr));
+    gap: 8px 20px;
+    padding: 16px 20px;
+    border-color: light-dark(rgb(0 0 0 / 10%), rgb(255 255 255 / 16%));
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega[aria-expanded='true'] > ul {
+    transform: translate(var(--mega-offset-x, 0), 0);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul::before {
+    left: var(--mega-pointer-x, 84px);
+    transform: none;
+    border-bottom: 8px solid var(--background-color);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li {
+    grid-column: var(--mega-group, 1);
+    grid-row: var(--mega-row, auto);
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-group-heading {
+    margin-top: 2px;
+    padding: 2px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--dark-color);
+    font-size: var(--body-font-size-s);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul.nav-mega-has-groups > li.nav-mega-group-item {
+    padding-top: 2px;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-group-item > a {
+    display: block;
+    padding: 10px 8px;
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: var(--body-font-size-xl);
+    line-height: 1.25;
+    font-weight: 500;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo {
+    grid-column: var(--mega-group, 2);
+    grid-row: 1 / span 20;
+    align-self: stretch;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 220px;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: var(--light-color);
+    text-decoration: none;
+    overflow: hidden;
+    gap: 10px;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo picture {
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo img {
+    display: block;
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo a:hover,
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-promo a:focus-visible {
+    background-color: var(--light-color);
+    box-shadow: 0 6px 20px rgb(0 0 0 / 12%);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-group-item > a:hover,
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-group-item > a:focus-visible {
+    background-color: var(--light-color);
+    text-decoration: none;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop-mega > ul > li.nav-mega-group-item + li.nav-mega-group-item {
+    border-top: 0;
+  }
 }
 
 /* tools */
@@ -316,6 +457,35 @@ header nav .nav-tools p {
   margin: 0;
 }
 
+header nav .nav-tools .nav-search-form {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+header nav .nav-tools .nav-search-input {
+  width: 190px;
+  border: 1px solid rgb(0 0 0 / 18%);
+  border-radius: 999px;
+  padding: 7px 42px 7px 12px;
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--body-font-size-s);
+  line-height: 1.2;
+}
+
+header nav .nav-tools .nav-search-input::placeholder {
+  color: inherit;
+  opacity: 0.7;
+}
+
+header nav .nav-tools .nav-search-input:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+
 header nav .nav-tools .nav-tool-control {
   display: inline-flex;
   align-items: center;
@@ -326,6 +496,16 @@ header nav .nav-tools .nav-tool-control {
   background: transparent;
   padding: 6px;
   color: inherit;
+}
+
+header nav .nav-tools .nav-search-submit {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  flex: 0 0 auto;
+  padding: 4px;
+  border-radius: 999px;
 }
 
 header nav .nav-tools .nav-tool-control:hover,
@@ -398,4 +578,10 @@ header nav .nav-tools .nav-language-menu a:hover,
 header nav .nav-tools .nav-language-menu a:focus-visible {
   background-color: var(--light-color);
   text-decoration: none;
+}
+
+@media (width < 900px) {
+  header nav .nav-tools .nav-search-input {
+    width: min(190px, 52vw);
+  }
 }
