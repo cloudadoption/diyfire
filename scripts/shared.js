@@ -56,3 +56,113 @@ export function formatDate(dateValue) {
 
   return formattedDateString;
 }
+
+/**
+ * Normalize path (ensure leading slash).
+ * @param {string} path - Path string
+ * @returns {string}
+ */
+export function normalizePath(path = '') {
+  if (!path) return '#';
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
+/**
+ * Parse comma-separated keywords into array.
+ * @param {string} raw - Raw string
+ * @returns {string[]}
+ */
+export function parseKeywords(raw = '') {
+  return String(raw)
+    .split(',')
+    .map((keyword) => keyword.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/**
+ * Get keywords from article object.
+ * @param {Object} article - Article data
+ * @returns {string}
+ */
+export function getArticleKeywords(article = {}) {
+  return String(article.keywords || '');
+}
+
+/**
+ * Get content timestamp from entry.
+ * @param {Object} entry - Content entry
+ * @returns {number}
+ */
+export function getContentTimestamp(entry = {}) {
+  const value = entry.lastModified || entry.date || entry.publisheddate;
+  if (!value) return 0;
+  if (/^[0-9]+$/.test(String(value))) return Number(value);
+  const parsed = Date.parse(String(value));
+  return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+/** Default page size for query-index pagination */
+export const QUERY_INDEX_PAGE_SIZE = 200;
+
+/**
+ * Fetch a page of query-index.
+ * @param {number} offset - Offset
+ * @param {number} limit - Limit
+ * @param {string} [baseUrl=''] - Base URL
+ * @returns {Promise<Array>}
+ */
+export async function fetchQueryIndexPage(offset, limit, baseUrl = '') {
+  const path = `/query-index.json?offset=${offset}&limit=${limit}`;
+  const url = baseUrl ? `${String(baseUrl).replace(/\/+$/, '')}${path}` : path;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error(`Query index request failed: ${resp.status}`);
+  const json = await resp.json();
+  return json?.data || [];
+}
+
+/**
+ * Fetch all rows from query-index by paginating.
+ * @param {{ pageSize?: number, baseUrl?: string }} [options]
+ * @returns {Promise<Array>}
+ */
+export async function fetchQueryIndexAll(options = {}) {
+  const { pageSize = QUERY_INDEX_PAGE_SIZE, baseUrl = '' } = options;
+
+  async function fetchPage(offset, acc) {
+    const rows = await fetchQueryIndexPage(offset, pageSize, baseUrl);
+    if (!rows.length) return acc;
+    const next = [...acc, ...rows];
+    return rows.length === pageSize ? fetchPage(offset + rows.length, next) : next;
+  }
+
+  return fetchPage(0, []);
+}
+
+/**
+ * Normalize URL or path to canonical path (no trailing slash).
+ * @param {string} href - URL or path
+ * @param {string} [base] - Base URL
+ * @returns {string}
+ */
+export function pathFromHref(href, base = typeof window !== 'undefined' ? window.location.origin : '') {
+  try {
+    const u = new URL(href, base);
+    return u.pathname.replace(/\/+$/, '') || '/';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Shuffle array (Fisher–Yates). Returns new array.
+ * @param {Array} arr - Input array
+ * @returns {Array}
+ */
+export function shuffle(arr) {
+  const next = [...arr];
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [next[i], next[j]] = [next[j], next[i]];
+  }
+  return next;
+}
