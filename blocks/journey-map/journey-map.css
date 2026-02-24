@@ -12,6 +12,7 @@
 
 .journey-map .journey-map-progress {
   --journey-progress: 0;
+
   display: none;
 }
 

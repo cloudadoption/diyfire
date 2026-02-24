@@ -5,6 +5,7 @@
  * @param {Element|Element[]|string|null} [content] - Child elements or text
  * @returns {Element}
  */
+
 // eslint-disable-next-line import/prefer-default-export
 export function createTag(tag, attributes = {}, content = null) {
   const el = document.createElement(tag);
