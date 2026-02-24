@@ -21,7 +21,7 @@
   font-weight: 800;
   line-height: 1.2;
   color: rgb(255 255 255);
-  text-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
 }
 
 .hero p {
@@ -35,7 +35,20 @@
   font-weight: 500;
   line-height: 1.2;
   color: rgb(255 255 255);
-  text-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
+  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+}
+
+.hero picture {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  box-sizing: border-box;
+}
+
+.hero picture img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .hero .icon {
@@ -55,22 +68,9 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: rgb(0 0 0 / 0.45);
+  background: rgb(0 0 0 / 45%);
   backdrop-filter: blur(2px);
   pointer-events: none;
-}
-
-.hero picture {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  box-sizing: border-box;
-}
-
-.hero picture img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
 }
 
 .hero h1,
