@@ -314,8 +314,6 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li.nav-mega-h
   padding: var(--space-l) 0 var(--space-s);
   font-size: var(--nav-heading-size);
   font-weight: var(--nav-heading-weight);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--dark-color);
   border-bottom: 0;
 }
@@ -396,8 +394,6 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li:not(.nav-m
     padding: var(--space-m) 0 var(--space-s);
     font-size: var(--nav-heading-size);
     font-weight: var(--nav-heading-weight);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--dark-color);
     border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
   }
@@ -936,8 +932,6 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
     display: block;
     margin-top: 0;
     padding: 0 0 var(--nav-gap);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--dark-color);
     font-size: var(--nav-heading-size);
     font-weight: var(--nav-heading-weight);
