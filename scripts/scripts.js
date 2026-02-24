@@ -12,6 +12,7 @@ import {
   loadSection,
   loadSections,
   loadCSS,
+  getMetadata,
 } from './aem.js';
 import dynamicBlocks from '../blocks/dynamic/index.js';
 
@@ -120,6 +121,22 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
+async function loadTemplate(main) {
+  try {
+    const template = getMetadata('template');
+    if (template) {
+      const mod = await import(`../templates/${template}/${template}.js`);
+      loadCSS(`${window.hlx.codeBasePath}/templates/${template}/${template}.css`);
+      if (mod.default) {
+        await mod.default(main);
+      }
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('template loading failed', error);
+  }
+}
+
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
@@ -143,6 +160,10 @@ async function loadEager(doc) {
 
 async function loadLazy(doc) {
   loadHeader(doc.querySelector('header'));
+  const templateName = getMetadata('template');
+  if (templateName) {
+    await loadTemplate(doc, templateName);
+  }
 
   const main = doc.querySelector('main');
   await loadSections(main);
