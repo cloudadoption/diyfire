@@ -10,7 +10,7 @@ import {
   decorateTemplateAndTheme,
   waitForFirstImage,
   loadSection,
-  loadSections,
+  sampleRUM,
   loadCSS,
   getMetadata,
 } from './aem.js';
@@ -174,7 +174,9 @@ async function loadLazy(doc) {
   }
 
   const main = doc.querySelector('main');
-  await loadSections(main);
+  const sections = main ? [...main.querySelectorAll('div.section')] : [];
+  await Promise.all(sections.map((s) => loadSection(s)));
+  if (sections[0] && sampleRUM.enhance) sampleRUM.enhance();
   await dynamicBlocks(main);
 
   const { hash } = window.location;
