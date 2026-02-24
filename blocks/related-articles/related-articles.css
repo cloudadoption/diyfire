@@ -1,0 +1,154 @@
+/* Related articles block – scoped, mobile-first, design tokens */
+
+main .related-articles {
+  width: 100%;
+  max-width: var(--grid-container-width);
+  margin: 0 auto;
+  padding: var(--space-m) var(--content-padding-inline);
+}
+
+main .related-articles .related-articles-heading {
+  margin: 0 0 var(--space-l);
+}
+
+main .related-articles .related-articles-slider {
+  position: relative;
+}
+
+main .related-articles .related-articles-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  gap: var(--space-l);
+  padding-bottom: var(--space-s);
+  scroll-padding-inline: var(--content-padding-inline);
+}
+
+main .related-articles .related-articles-card {
+  flex: 0 0 min(86%, 360px);
+  scroll-snap-align: start;
+  margin: 0;
+  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-radius: var(--space-m);
+  overflow: clip;
+  background: light-dark(var(--color-light), var(--color-gray-900));
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+main .related-articles .related-articles-card-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+main .related-articles .related-articles-card-strip {
+  block-size: var(--space-s);
+  background: var(--color-accent);
+}
+
+main .related-articles .related-articles-card-content {
+  padding: var(--space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  height: 100%;
+}
+
+main .related-articles .related-articles-card h3 {
+  margin: 0;
+  font-size: var(--heading-font-size-s);
+}
+
+main .related-articles .related-articles-card-description {
+  margin: 0;
+  line-height: 1.4;
+  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+}
+
+main .related-articles .related-articles-card-date {
+  margin: auto 0 0;
+  font-size: var(--body-font-size-xs);
+  color: var(--color-gray-500);
+}
+
+main .related-articles .related-articles-card:hover,
+main .related-articles .related-articles-card:focus-within {
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 10%);
+}
+
+main .related-articles .related-articles-empty {
+  margin: var(--space-m) 0 0;
+}
+
+main .related-articles .related-articles-controls {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  inset: 50% 0 auto;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 2;
+  padding-inline: var(--space-xs);
+}
+
+main .related-articles .related-articles-arrow {
+  border: 1px solid light-dark(rgb(255 255 255 / 55%), rgb(255 255 255 / 16%));
+  background: light-dark(rgb(255 255 255 / 72%), rgb(24 27 32 / 70%));
+  color: inherit;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 999px;
+  padding: 0;
+  font-size: 22px;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 14%);
+  pointer-events: auto;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+main .related-articles .related-articles-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+main .related-articles .related-articles-arrow.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+@media (width >= 600px) {
+  main .related-articles .related-articles-card {
+    flex-basis: min(88%, 360px);
+  }
+}
+
+@media (width >= 900px) {
+  main .related-articles {
+    padding-inline: 0;
+  }
+
+  main .related-articles .related-articles-card {
+    flex-basis: min(32%, 380px);
+  }
+
+  main .related-articles .related-articles-card-content {
+    padding: var(--space-l);
+  }
+
+  main .related-articles .related-articles-arrow {
+    inline-size: 52px;
+    block-size: 52px;
+    font-size: 24px;
+  }
+}
