@@ -213,6 +213,104 @@ function findLangMenu(tools, globe) {
   return null;
 }
 
+function setCookie(name, value, days = 365) {
+  const expires = new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toUTCString();
+  document.cookie = `${encodeURIComponent(name)}=${value}; expires=${expires}; path=/`;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+}
+
+function getCookie(name) {
+  const encoded = encodeURIComponent(name);
+  const cookie = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(`${encoded}=`));
+  if (!cookie) return '';
+  return decodeURIComponent(cookie.split('=').slice(1).join('='));
+}
+
+function ensureGoogleTranslateScript() {
+  if (window.__googleTranslateScriptLoaded) return Promise.resolve();
+  if (window.__googleTranslateScriptPromise) return window.__googleTranslateScriptPromise;
+
+  if (!document.getElementById('google_translate_element')) {
+    const holder = document.createElement('div');
+    holder.id = 'google_translate_element';
+    holder.style.display = 'none';
+    document.body.append(holder);
+  }
+
+  window.__googleTranslateScriptPromise = new Promise((resolve) => {
+    window.googleTranslateElementInit = () => {
+      if (window.google?.translate?.TranslateElement) {
+        new window.google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+      }
+      window.__googleTranslateScriptLoaded = true;
+      resolve();
+    };
+
+    const existing = document.querySelector('script[src*="translate.google.com/translate_a/element.js"]');
+    if (existing) {
+      if (window.google?.translate?.TranslateElement) {
+        window.__googleTranslateScriptLoaded = true;
+        resolve();
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+    script.defer = true;
+    script.onerror = () => resolve();
+    document.body.append(script);
+  });
+
+  return window.__googleTranslateScriptPromise;
+}
+
+async function switchLanguage(lang) {
+  if (lang === 'fr') {
+    setCookie('googtrans', '/en/fr');
+    window.location.reload();
+    return;
+  }
+
+  deleteCookie('googtrans');
+  window.location.reload();
+}
+
+function hydrateTranslateFromCookie() {
+  const value = getCookie('googtrans');
+  if (!value || !value.includes('/en/')) return;
+  ensureGoogleTranslateScript();
+}
+
+function decorateLanguageMenu(menu) {
+  if (!menu || menu.dataset.translated === 'true') return;
+  menu.dataset.translated = 'true';
+
+  const links = menu.querySelectorAll('a');
+  links.forEach((link) => {
+    const text = link.textContent.trim().toLowerCase();
+    if (text.includes('french') || text.includes('français') || text.includes('fran')) {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await switchLanguage('fr');
+      });
+      return;
+    }
+    if (text.includes('english') || text.includes('anglais')) {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        switchLanguage('en');
+      });
+    }
+  });
+}
+
 function initLanguage(tools) {
   const globe = tools.querySelector('.icon-globe')?.closest('p, button, a, div');
   const menu = globe ? findLangMenu(tools, globe) : null;
@@ -245,6 +343,8 @@ function initLanguage(tools) {
   document.addEventListener('click', (e) => { if (!tools.contains(e.target)) { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
   document.addEventListener('keydown', (e) => { if (e.code === 'Escape') { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); } });
   menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { menu.hidden = true; globe.setAttribute('aria-expanded', 'false'); }));
+
+  decorateLanguageMenu(menu);
 }
 
 function toggleMobile(nav, open) {
@@ -326,6 +426,7 @@ export default async function decorate(block) {
     initTheme(tools);
     initSearch(tools);
     initLanguage(tools);
+    hydrateTranslateFromCookie();
   }
 
   nav.querySelectorAll('.nav-drop-mega').forEach((li) => li.megaSync?.());
