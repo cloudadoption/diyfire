@@ -1,5 +1,7 @@
 // Delayed functionality – martech, social share (injected on every page)
-import { buildBlock, decorateBlock, loadBlock, loadScript } from './aem.js';
+import {
+  buildBlock, decorateBlock, loadBlock, loadScript,
+} from './aem.js';
 import { createTag } from './shared.js';
 
 const SHARE_THIS_SRC = 'https://platform-api.sharethis.com/js/sharethis.js';
