@@ -15,7 +15,7 @@ main .form-container .form-wrapper {
 main .form form {
   display: grid;
   gap: var(--space-s);
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   border-radius: 12px;
   padding: var(--space-m);
   background: transparent;
@@ -44,7 +44,7 @@ main .form form {
   scroll-margin: 1em;
   width: 100%;
   min-width: 0;
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   border-radius: 8px;
   padding: 10px 12px;
   background: transparent;
@@ -174,8 +174,8 @@ main .form form {
   width: calc(2em + 2px);
   height: calc(1em + 2px);
   border-radius: 1em;
-  border: 1px solid currentColor;
-  background: currentColor;
+  border: 1px solid currentcolor;
+  background: currentcolor;
   opacity: 0.4;
   transition: opacity 0.2s;
   cursor: pointer;
@@ -238,7 +238,7 @@ main .form form {
 }
 
 .form .button-wrapper button.button:not(.secondary) {
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   background: transparent;
   color: inherit;
 }
@@ -254,7 +254,7 @@ main .form form {
 }
 
 .form .button-wrapper button.button.secondary {
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   background: transparent;
   color: inherit;
 }
