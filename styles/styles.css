@@ -441,6 +441,15 @@ main img {
   width: 100%;
 }
 
+main .icon.icon-logo {
+  width: 110px;
+  height: 30px;
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+  margin-bottom: 10px;
+}
+
 /* Reserve space for unsized images to reduce CLS */
 main img:not([width], [height]) {
   aspect-ratio: 16 / 9;
