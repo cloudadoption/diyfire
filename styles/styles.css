@@ -506,3 +506,11 @@ main > .section.divider::after {
   margin: 0 auto;
   border-bottom: 1px solid var(--color-gray-200);
 }
+
+/* section-metadata style: spacer utilities – add to section metadata for readability gaps */
+main > .section.spacer-top-s { margin-top: var(--space-s); }
+main > .section.spacer-top-m { margin-top: var(--space-m); }
+main > .section.spacer-top-l { margin-top: var(--space-l); }
+main > .section.spacer-bottom-s { margin-bottom: var(--space-s); }
+main > .section.spacer-bottom-m { margin-bottom: var(--space-m); }
+main > .section.spacer-bottom-l { margin-bottom: var(--space-l); }
