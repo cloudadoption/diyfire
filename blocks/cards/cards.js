@@ -1,7 +1,6 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-  /* change to ul, li */
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
@@ -13,5 +12,22 @@ export default function decorate(block) {
     ul.append(li);
   });
   ul.querySelectorAll('picture > img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
+
+  ul.querySelectorAll('li').forEach((li) => {
+    const link = li.querySelector('.cards-card-image a[href]');
+    if (link) {
+      li.classList.add('clickable');
+      const href = link.getAttribute('href');
+      const title = link.getAttribute('title')?.trim() || '';
+      link.replaceWith(...link.childNodes);
+      const wrapper = document.createElement('a');
+      wrapper.href = href;
+      if (title) wrapper.title = title;
+      wrapper.className = 'cards-card-link';
+      while (li.firstChild) wrapper.append(li.firstChild);
+      li.append(wrapper);
+    }
+  });
+
   block.replaceChildren(ul);
 }
