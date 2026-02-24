@@ -27,3 +27,32 @@ export function createTag(tag, attributes = {}, content = null) {
 
   return el;
 }
+
+/**
+ * Format a date value for display.
+ * @param {string|number} dateValue - Date string or timestamp
+ * @returns {string} Formatted date string
+ */
+export function formatDate(dateValue) {
+  if (!dateValue) return '';
+  const normalized = String(dateValue).trim();
+  if (!normalized) return '';
+
+  let date;
+  if (/^[0-9]+$/.test(normalized)) {
+    const ts = Number(normalized);
+    date = new Date(ts < 1e12 ? ts * 1000 : ts);
+  } else {
+    date = new Date(normalized);
+  }
+
+  if (Number.isNaN(date.getTime())) return normalized;
+
+  const formattedDateString = date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  return formattedDateString;
+}

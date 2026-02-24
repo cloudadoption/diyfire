@@ -26,6 +26,7 @@
   --grid-gutter-width: 8.3%;
 
   /* minimal spacing scale for consistent global layout */
+  --space-xs: 4px;
   --space-s: 8px;
   --space-m: 16px;
   --space-l: 24px;
