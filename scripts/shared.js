@@ -154,6 +154,49 @@ export function pathFromHref(href, base = typeof window !== 'undefined' ? window
 }
 
 /**
+ * Get authored link paths from block (list of a[href] → { path, title }).
+ * Skips when block has config-style rows (2+ cells).
+ * @param {Element} block - Block element
+ * @returns {Array<{ path: string, title: string }>}
+ */
+export function getAuthoredLinks(block) {
+  const rows = block.querySelectorAll(':scope > div');
+  const hasConfigRows = [...rows].some((row) => row.children.length >= 2);
+  if (hasConfigRows) return [];
+
+  const anchors = block.querySelectorAll('a[href]');
+  if (!anchors.length) return [];
+
+  return [...anchors].map((a) => {
+    const path = pathFromHref(a.href);
+    const rawTitle = (a.textContent || '').trim();
+    const looksLikeUrl = /^https?:\/\//i.test(rawTitle) || rawTitle.length > 80;
+    const title = looksLikeUrl ? '' : rawTitle;
+    return { path, title };
+  }).filter((item) => item.path && item.path !== '/');
+}
+
+/**
+ * Resolve authored links with metadata from query index.
+ * @param {Array<{ path: string, title: string }>} authoredLinks
+ * @param {Array} indexRows - Query index data
+ * @returns {Array<{ path, title, description, date? }>}
+ */
+export function resolveArticlesFromIndex(authoredLinks, indexRows) {
+  return authoredLinks.map(({ path, title: linkTitle }) => {
+    const norm = normalizePath(path);
+    const row = indexRows.find((r) => r?.path && normalizePath(r.path) === norm);
+    const fallbackTitle = norm.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') || norm;
+    return {
+      path: norm,
+      title: row?.title?.trim() || linkTitle || fallbackTitle,
+      description: row?.description?.trim() || '',
+      date: row?.date || row?.publisheddate || row?.lastModified,
+    };
+  });
+}
+
+/**
  * Shuffle array (Fisher–Yates). Returns new array.
  * @param {Array} arr - Input array
  * @returns {Array}
