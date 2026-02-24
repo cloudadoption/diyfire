@@ -3,36 +3,16 @@ import {
   createTag,
   fetchQueryIndexAll,
   formatDate,
-  getContentTimestamp,
   getArticleKeywords,
+  getAuthoredLinks,
+  getContentTimestamp,
   normalizePath,
   parseKeywords,
-  pathFromHref,
+  resolveArticlesFromIndex,
   shuffle,
 } from '../../scripts/shared.js';
 
 const RESULT_LIMIT = 5;
-
-/**
- * Collects static links from block DOM (e.g. div > div > p > a).
- * Returns array of { path, title } or empty if no such structure.
- */
-function getAuthoredLinks(block) {
-  const rows = block.querySelectorAll(':scope > div');
-  const hasConfigRows = [...rows].some((row) => row.children.length >= 2);
-  if (hasConfigRows) return [];
-
-  const anchors = block.querySelectorAll('a[href]');
-  if (!anchors.length) return [];
-
-  return [...anchors].map((a) => {
-    const path = pathFromHref(a.href);
-    const rawTitle = (a.textContent || '').trim();
-    const looksLikeUrl = /^https?:\/\//i.test(rawTitle) || rawTitle.length > 80;
-    const title = looksLikeUrl ? '' : rawTitle;
-    return { path, title };
-  }).filter((item) => item.path && item.path !== '/');
-}
 
 function rowMatchesKeyword(row, keyword) {
   const articleKeywords = parseKeywords(getArticleKeywords(row));
@@ -162,16 +142,7 @@ export default async function init(block) {
     } catch {
       indexRows = [];
     }
-    const articles = authoredLinks.map(({ path, title: linkTitle }) => {
-      const norm = normalizePath(path);
-      const row = indexRows.find((r) => normalizePath(r.path) === norm);
-      return {
-        path: norm,
-        title: row?.title || linkTitle || norm.split('/').filter(Boolean).pop()?.replace(/-/g, ' ') || norm,
-        description: row?.description,
-        date: row?.date || row?.publisheddate || row?.lastModified,
-      };
-    });
+    const articles = resolveArticlesFromIndex(authoredLinks, indexRows);
     renderRelatedList(block, articles, 'No related articles.');
     return;
   }
