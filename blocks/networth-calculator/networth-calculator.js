@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { createTag } from '../../scripts/shared.js';
 
 const DEFAULTS = {
@@ -170,14 +171,19 @@ function calculate(values) {
   const afterTaxMonthlyIncome = Math.max(0, toNumber(values.afterTaxMonthlyIncome, DEFAULTS.afterTaxMonthlyIncome));
   const targetEmergencyMonths = Math.max(1, Math.round(toNumber(values.targetEmergencyMonths, DEFAULTS.targetEmergencyMonths)));
 
-  const runwayMonths = monthlyEssentialExpenses > 0 ? liquidAssets / monthlyEssentialExpenses : 0;
-  const debtToAssetRatio = totalAssets > 0 ? (totalLiabilities / totalAssets) * 100 : 0;
-  const debtServiceRatio = afterTaxMonthlyIncome > 0 ? (monthlyDebtPayments / afterTaxMonthlyIncome) * 100 : 0;
+  const runwayMonths = monthlyEssentialExpenses > 0
+    ? liquidAssets / monthlyEssentialExpenses : 0;
+  const debtToAssetRatio = totalAssets > 0
+    ? (totalLiabilities / totalAssets) * 100 : 0;
+  const debtServiceRatio = afterTaxMonthlyIncome > 0
+    ? (monthlyDebtPayments / afterTaxMonthlyIncome) * 100 : 0;
   const monthlyBuffer = afterTaxMonthlyIncome - monthlyEssentialExpenses - monthlyDebtPayments;
 
-  const registeredAssets = assetsCore.tfsa + assetsCore.rrsp + assetsCore.fhsa + assetsCore.pensionValue;
+  const registeredAssets = assetsCore.tfsa + assetsCore.rrsp + assetsCore.fhsa
+    + assetsCore.pensionValue;
   const investableAssets = registeredAssets + assetsCore.nonRegistered + assetsCore.cash;
-  const registeredShare = investableAssets > 0 ? (registeredAssets / investableAssets) * 100 : 0;
+  const registeredShare = investableAssets > 0
+    ? (registeredAssets / investableAssets) * 100 : 0;
   const housingConcentration = totalAssets > 0 ? (homeValue / totalAssets) * 100 : 0;
 
   const health = evaluateHealth({
@@ -189,11 +195,21 @@ function calculate(values) {
   });
 
   const actions = [];
-  if (liabilities.creditCard > 0) actions.push('Prioritize credit card balance first (highest interest).');
-  if (runwayMonths < targetEmergencyMonths) actions.push(`Build emergency runway toward ${targetEmergencyMonths} months of essentials.`);
-  if (debtServiceRatio > 35) actions.push('Reduce monthly debt burden before increasing investment risk.');
-  if (registeredShare < 50) actions.push('Review TFSA/RRSP/FHSA room before adding more taxable investments.');
-  if (!actions.length) actions.push('Strong base: keep automating savings and review once per quarter.');
+  if (liabilities.creditCard > 0) {
+    actions.push('Prioritize credit card balance first (highest interest).');
+  }
+  if (runwayMonths < targetEmergencyMonths) {
+    actions.push(`Build emergency runway toward ${targetEmergencyMonths} months of essentials.`);
+  }
+  if (debtServiceRatio > 35) {
+    actions.push('Reduce monthly debt burden before increasing investment risk.');
+  }
+  if (registeredShare < 50) {
+    actions.push('Review TFSA/RRSP/FHSA room before adding more taxable investments.');
+  }
+  if (!actions.length) {
+    actions.push('Strong base: keep automating savings and review once per quarter.');
+  }
 
   return {
     includeHome,
@@ -283,29 +299,63 @@ export default function decorate(block) {
   refs['nwc-include-home'] = includeHome.input;
 
   essentials.append(createTag('h3', { class: 'networth-calculator-subtitle' }, 'Assets'));
-  add({ id: 'nwc-cash', label: 'Cash', value: DEFAULTS.cash, step: 500 });
-  add({ id: 'nwc-tfsa', label: 'TFSA', value: DEFAULTS.tfsa, step: 1000 });
-  add({ id: 'nwc-rrsp', label: 'RRSP', value: DEFAULTS.rrsp, step: 1000 });
-  add({ id: 'nwc-fhsa', label: 'FHSA', value: DEFAULTS.fhsa, step: 500 });
-  add({ id: 'nwc-non-registered', label: 'Non-registered investments', value: DEFAULTS.nonRegistered, step: 1000 });
-  add({ id: 'nwc-home-value', label: 'Primary home value', value: DEFAULTS.homeValue, step: 5000 });
+  add({
+    id: 'nwc-cash', label: 'Cash', value: DEFAULTS.cash, step: 500,
+  });
+  add({
+    id: 'nwc-tfsa', label: 'TFSA', value: DEFAULTS.tfsa, step: 1000,
+  });
+  add({
+    id: 'nwc-rrsp', label: 'RRSP', value: DEFAULTS.rrsp, step: 1000,
+  });
+  add({
+    id: 'nwc-fhsa', label: 'FHSA', value: DEFAULTS.fhsa, step: 500,
+  });
+  add({
+    id: 'nwc-non-registered', label: 'Non-registered investments', value: DEFAULTS.nonRegistered, step: 1000,
+  });
+  add({
+    id: 'nwc-home-value', label: 'Primary home value', value: DEFAULTS.homeValue, step: 5000,
+  });
 
   essentials.append(createTag('h3', { class: 'networth-calculator-subtitle' }, 'Liabilities'));
-  add({ id: 'nwc-mortgage', label: 'Mortgage balance', value: DEFAULTS.mortgage, step: 5000 });
-  add({ id: 'nwc-credit-card', label: 'Credit card balance', value: DEFAULTS.creditCard, step: 100 });
-  add({ id: 'nwc-line-of-credit', label: 'Line of credit', value: DEFAULTS.lineOfCredit, step: 100 });
-  add({ id: 'nwc-student-loan', label: 'Student loan', value: DEFAULTS.studentLoan, step: 500 });
-  add({ id: 'nwc-car-loan', label: 'Car loan', value: DEFAULTS.carLoan, step: 500 });
+  add({
+    id: 'nwc-mortgage', label: 'Mortgage balance', value: DEFAULTS.mortgage, step: 5000,
+  });
+  add({
+    id: 'nwc-credit-card', label: 'Credit card balance', value: DEFAULTS.creditCard, step: 100,
+  });
+  add({
+    id: 'nwc-line-of-credit', label: 'Line of credit', value: DEFAULTS.lineOfCredit, step: 100,
+  });
+  add({
+    id: 'nwc-student-loan', label: 'Student loan', value: DEFAULTS.studentLoan, step: 500,
+  });
+  add({
+    id: 'nwc-car-loan', label: 'Car loan', value: DEFAULTS.carLoan, step: 500,
+  });
 
   optionalGroup.append(createTag('h3', { class: 'networth-calculator-subtitle' }, 'Additional assets'));
-  add({ id: 'nwc-pension-value', label: 'Pension estimate', value: DEFAULTS.pensionValue, step: 1000 }, optionalGroup);
-  add({ id: 'nwc-business-value', label: 'Business value', value: DEFAULTS.businessValue, step: 1000 }, optionalGroup);
-  add({ id: 'nwc-vehicle-value', label: 'Vehicle value', value: DEFAULTS.vehicleValue, step: 500 }, optionalGroup);
-  add({ id: 'nwc-other-assets', label: 'Other assets', value: DEFAULTS.otherAssets, step: 500 }, optionalGroup);
+  add({
+    id: 'nwc-pension-value', label: 'Pension estimate', value: DEFAULTS.pensionValue, step: 1000,
+  }, optionalGroup);
+  add({
+    id: 'nwc-business-value', label: 'Business value', value: DEFAULTS.businessValue, step: 1000,
+  }, optionalGroup);
+  add({
+    id: 'nwc-vehicle-value', label: 'Vehicle value', value: DEFAULTS.vehicleValue, step: 500,
+  }, optionalGroup);
+  add({
+    id: 'nwc-other-assets', label: 'Other assets', value: DEFAULTS.otherAssets, step: 500,
+  }, optionalGroup);
 
   optionalGroup.append(createTag('h3', { class: 'networth-calculator-subtitle' }, 'Additional liabilities'));
-  add({ id: 'nwc-tax-owing', label: 'Tax owing', value: DEFAULTS.taxOwing, step: 100 }, optionalGroup);
-  add({ id: 'nwc-other-liabilities', label: 'Other liabilities', value: DEFAULTS.otherLiabilities, step: 100 }, optionalGroup);
+  add({
+    id: 'nwc-tax-owing', label: 'Tax owing', value: DEFAULTS.taxOwing, step: 100,
+  }, optionalGroup);
+  add({
+    id: 'nwc-other-liabilities', label: 'Other liabilities', value: DEFAULTS.otherLiabilities, step: 100,
+  }, optionalGroup);
 
   function values() {
     return {

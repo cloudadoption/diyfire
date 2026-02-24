@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { createTag } from '../../scripts/shared.js';
 
 const DEFAULTS = {
@@ -247,7 +248,10 @@ function calculate(values) {
 
   const federalCredit = FEDERAL_TAX.bpa * FEDERAL_TAX.brackets[0].rate;
   const provincialCredit = provinceTaxConfig.bpa * provinceTaxConfig.brackets[0].rate;
-  const estimatedIncomeTax = Math.max(0, (federalTaxRaw - federalCredit) + (provincialTaxRaw - provincialCredit));
+  const estimatedIncomeTax = Math.max(
+    0,
+    (federalTaxRaw - federalCredit) + (provincialTaxRaw - provincialCredit),
+  );
   const estimatedEffectiveRate = grossIncome > 0 ? ((estimatedIncomeTax / grossIncome) * 100) : 0;
   const autoAfterTax = Math.max(0, grossIncome - estimatedIncomeTax - cppEiAnnual);
   const afterTaxIncome = manualAfterTax
@@ -268,7 +272,8 @@ function calculate(values) {
   const targetRate = 20;
   const targetMonthlySavings = (afterTaxIncome * (targetRate / 100)) / 12;
   const extraNeededForTarget = Math.max(0, targetMonthlySavings - totalSavingsMonthly);
-  const assetsCoverageYears = monthlyExpenses > 0 ? (currentAssets / (monthlyExpenses * 12)) : 0;
+  const assetsCoverageYears = monthlyExpenses > 0
+    ? (currentAssets / (monthlyExpenses * 12)) : 0;
   const status = benchmark(savingsRate);
 
   return {

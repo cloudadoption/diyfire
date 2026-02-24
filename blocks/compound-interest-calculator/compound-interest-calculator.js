@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { createTag, loadChartJs, createChart } from '../../scripts/shared.js';
 
 const DEFAULTS = {
@@ -12,8 +13,12 @@ const DEFAULTS = {
   showYearlyBreakdown: false,
 };
 
-const CONTRIB_FREQ_PER_YEAR = { monthly: 12, biweekly: 26, weekly: 52, annually: 1 };
-const COMPOUND_PER_YEAR = { annually: 1, monthly: 12, daily: 365 };
+const CONTRIB_FREQ_PER_YEAR = {
+  monthly: 12, biweekly: 26, weekly: 52, annually: 1,
+};
+const COMPOUND_PER_YEAR = {
+  annually: 1, monthly: 12, daily: 365,
+};
 
 function toNumber(value, fallback = 0) {
   const parsed = Number(value);
@@ -71,7 +76,11 @@ function buildSelect(id, label, options, value, tooltip) {
     tip.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
     labelEl.append(tip);
   }
-  const select = createTag('select', { id }, options.map((opt) => createTag('option', { value: opt.value, selected: opt.value === value ? 'selected' : undefined }, opt.label)));
+  const select = createTag('select', { id }, options.map((opt) => createTag(
+    'option',
+    { value: opt.value, selected: opt.value === value ? 'selected' : undefined },
+    opt.label,
+  )));
   row.append(labelEl, select);
   return { row, input: select };
 }
@@ -253,7 +262,7 @@ function buildChartContainer(block, chartData) {
   loadChartJs()
     .then(() => {
       const chart = drawChartWithChartJs(canvas, chartData);
-      if (chart && block) block._compoundInterestChart = chart;
+      if (chart && block) block.compoundInterestChart = chart;
     })
     .catch(() => {
       wrap.append(createTag('p', { class: 'compound-interest-calculator-chart-fallback' }, 'Chart unavailable.'));
@@ -420,9 +429,9 @@ export default function decorate(block) {
   function render() {
     refs['cic-inflation-rate'].disabled = !refs['cic-inflation'].checked;
 
-    if (block._compoundInterestChart) {
-      block._compoundInterestChart.destroy();
-      block._compoundInterestChart = null;
+    if (block.compoundInterestChart) {
+      block.compoundInterestChart.destroy();
+      block.compoundInterestChart = null;
     }
 
     const result = calculate(values());
