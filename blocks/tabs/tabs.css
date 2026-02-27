@@ -1,10 +1,11 @@
 .tabs {
   color: var(--text-color);
-  background: var(--color-light);
+  background: light-dark(var(--color-light), var(--color-slate-800));
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   margin-bottom: var(--section-block-space);
+  border: 1px solid light-dark(transparent, var(--color-border-dark));
 }
 
 /* Contained card layout – match width of other content blocks */
@@ -44,7 +45,7 @@ main .section .tabs {
   border: 0;
   border-bottom: 3px solid transparent;
   box-sizing: border-box;
-  color: var(--color-text-light);
+  color: light-dark(var(--color-text-light), var(--color-slate-400));
   -webkit-text-fill-color: currentcolor;
   cursor: pointer;
   flex: 1;
@@ -64,7 +65,7 @@ main .section .tabs {
   color: var(--color-accent);
   -webkit-text-fill-color: var(--color-accent);
   border-bottom-color: var(--color-accent);
-  background-color: var(--color-light);
+  background-color: light-dark(var(--color-light), var(--color-slate-800));
 }
 
 /* fadeIn animation for tab panels */
@@ -110,7 +111,7 @@ main .section .tabs {
 .tabs .tab .section h2,
 .tabs .tab .section h3 {
   font-size: var(--heading-font-size-s);
-  color: var(--color-brand);
+  color: light-dark(var(--color-brand), var(--color-light));
 }
 
 .tabs .tab .section p,
@@ -123,7 +124,7 @@ main .section .tabs {
 .tabs.has-background {
   position: relative;
   background-image: none !important;
-  background-color: var(--color-light);
+  background-color: light-dark(var(--color-light), var(--color-slate-800));
   color: var(--text-color);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
@@ -144,7 +145,7 @@ main .section .tabs {
 }
 
 .tabs.has-background .tabs-list > button[role='tab'] {
-  color: var(--color-text-light);
+  color: light-dark(var(--color-text-light), var(--color-slate-400));
   -webkit-text-fill-color: currentcolor;
 }
 
@@ -158,7 +159,7 @@ main .section .tabs {
   color: var(--color-accent);
   -webkit-text-fill-color: var(--color-accent);
   border-bottom-color: var(--color-accent);
-  background-color: var(--color-light);
+  background-color: light-dark(var(--color-light), var(--color-slate-800));
 }
 
 .tabs.has-background .tab .section {

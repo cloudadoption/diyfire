@@ -40,7 +40,7 @@ main .related-articles .related-articles-card {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
   overflow: hidden;
-  background: light-dark(var(--color-light), var(--color-gray-900));
+  background: light-dark(var(--color-light), var(--color-slate-800));
   box-shadow: var(--shadow-card);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -74,7 +74,7 @@ main .related-articles .related-articles-card h3 {
 main .related-articles .related-articles-card-description {
   margin: 0;
   line-height: 1.4;
-  color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  color: light-dark(var(--color-gray-700), var(--color-slate-400));
 }
 
 main .related-articles .related-articles-card-date {
@@ -87,7 +87,7 @@ main .related-articles .related-articles-card:hover,
 main .related-articles .related-articles-card:focus-within {
   transform: translateY(-5px);
   border-color: var(--color-accent);
-  box-shadow: 0 12px 24px light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 35%));
+  box-shadow: 0 12px 24px light-dark(rgb(0 0 0 / 10%), rgb(16 185 129 / 20%));
 }
 
 main .related-articles .related-articles-empty {
@@ -107,7 +107,7 @@ main .related-articles .related-articles-controls {
 
 main .related-articles .related-articles-arrow {
   border: 1px solid var(--color-border);
-  background: light-dark(rgb(255 255 255 / 90%), rgb(24 27 32 / 85%));
+  background: light-dark(rgb(255 255 255 / 90%), rgb(30 41 59 / 85%));
   color: inherit;
   inline-size: 44px;
   block-size: 44px;

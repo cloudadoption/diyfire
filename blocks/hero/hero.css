@@ -92,6 +92,25 @@
   pointer-events: none;
 }
 
+/* Emerald radial glow in dark mode */
+.hero::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  width: 80%;
+  height: 140%;
+  background: radial-gradient(circle, var(--color-accent-glow) 0%, transparent 70%);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+}
+
+:where(body.dark-scheme, body.dark, body.theme-dark) .hero::after {
+  display: block;
+}
+
 @media (width >= 600px) {
   .hero {
     min-height: 380px;

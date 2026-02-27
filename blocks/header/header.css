@@ -4,7 +4,7 @@ header {
   --header-hover-bg: light-dark(rgb(0 0 0 / 6%), rgb(255 255 255 / 8%));
   --header-link-hover-bg: light-dark(rgb(0 0 0 / 4%), rgb(255 255 255 / 6%));
   --header-drop-shadow: 0 8px 24px rgb(0 0 0 / 10%), 0 2px 8px rgb(0 0 0 / 4%);
-  --header-drop-border: light-dark(var(--color-gray-200), var(--color-gray-600));
+  --header-drop-border: light-dark(var(--color-gray-200), var(--color-border-dark));
 
   /* typography: brand (strongest) > primary nav > dropdown headings > dropdown items */
   --nav-brand-size: var(--heading-font-size-s);   /* ~20px */
@@ -30,13 +30,13 @@ header {
   --nav-bg-hover: var(--header-hover-bg);
   --nav-bg-link-hover: var(--header-link-hover-bg);
   --nav-bg-dropdown: var(--background-color);
-  --nav-bg-dropdown-mobile: light-dark(var(--color-gray-100), var(--color-gray-800));
+  --nav-bg-dropdown-mobile: light-dark(var(--color-gray-100), var(--color-slate-800));
   --nav-bg-mega: var(--color-shaded);
   --nav-bg-hover-item: var(--light-color);
 
   /* header uses neutral hover color, with green accent tint */
-  --nav-hover-color: light-dark(var(--color-brand), var(--color-gray-200));
-  --nav-focus-color: light-dark(var(--color-accent), var(--color-gray-300));
+  --nav-hover-color: light-dark(var(--color-brand), var(--color-slate-400));
+  --nav-focus-color: light-dark(var(--color-accent), var(--color-green-300));
 
   /* desktop-only (overridden in @media 900px) */
   --nav-desktop-max-width: 1264px;
@@ -242,7 +242,7 @@ header nav .nav-sections ul {
 
 header nav .nav-sections .default-content-wrapper > ul > li {
   font-weight: var(--nav-primary-weight);
-  border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+  border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-border-dark));
 }
 
 header nav .nav-sections .default-content-wrapper > ul > li:last-child {
@@ -380,7 +380,7 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li:not(.nav-m
     padding: var(--nav-dropdown-padding);
     margin: 0 var(--nav-gap) var(--nav-gap);
     border-radius: var(--nav-radius);
-    border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+    border: 1px solid light-dark(var(--color-gray-200), var(--color-border-dark));
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > .nav-mega-inner {
@@ -394,7 +394,7 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li:not(.nav-m
     font-size: var(--nav-heading-size);
     font-weight: var(--nav-heading-weight);
     color: var(--dark-color);
-    border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+    border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-border-dark));
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > .nav-mega-inner > li.nav-mega-heading:first-child {
@@ -431,7 +431,7 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li:not(.nav-m
     padding: var(--space-s) 0;
     font-size: var(--nav-item-size);
     font-weight: var(--nav-item-weight);
-    border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+    border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-border-dark));
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > .nav-mega-inner > li.nav-mega-item:last-child {
@@ -448,7 +448,7 @@ header nav .nav-sections .default-content-wrapper > ul > li > ul > li:not(.nav-m
   header nav .nav-sections .default-content-wrapper > ul > li > ul > .nav-mega-inner > li.nav-mega-heading + li.nav-mega-heading {
     margin-top: var(--space-m);
     padding-top: var(--space-m);
-    border-top: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+    border-top: 1px solid light-dark(var(--color-gray-200), var(--color-border-dark));
   }
 }
 

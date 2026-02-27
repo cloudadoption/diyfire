@@ -15,8 +15,8 @@ main .section.teaser-container .teaser-wrapper {
 
 main .teaser {
   width: 100%;
-  background-color: var(--color-brand);
-  color: var(--color-light);
+  background-color: light-dark(var(--color-gray-100), var(--color-slate-800));
+  color: var(--color-gray-500);
   text-align: center;
   font-size: var(--body-font-size-m);
   font-weight: 500;
