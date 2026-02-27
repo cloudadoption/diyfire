@@ -195,7 +195,7 @@ main .compound-interest-calculator .compound-interest-calculator-table thead th 
 main .compound-interest-calculator .compound-interest-calculator-table .compound-interest-calculator-table-sort {
   margin-inline-start: 4px;
   opacity: 0.7;
-  font-size: 0.85em;
+  font-size: var(--body-font-size-xs);
 }
 
 main .compound-interest-calculator .compound-interest-calculator-table-th-year,

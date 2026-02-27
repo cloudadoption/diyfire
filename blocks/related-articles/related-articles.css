@@ -1,4 +1,4 @@
-/* Related articles block – scoped, mobile-first, design tokens */
+/* Related articles block – horizontal scroll with arrows, cards styling */
 
 main .related-articles {
   width: 100%;
@@ -18,26 +18,31 @@ main .related-articles .related-articles-slider {
 main .related-articles .related-articles-list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: var(--space-s) 0;
   display: flex;
+  gap: var(--space-xl);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  gap: var(--space-l);
-  padding-bottom: var(--space-s);
   scroll-padding-inline: var(--content-padding-inline);
+  scrollbar-width: none;
 }
 
+main .related-articles .related-articles-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Cards: 1 visible on mobile */
 main .related-articles .related-articles-card {
-  flex: 0 0 min(86%, 360px);
+  flex: 0 0 min(86%, 340px);
   scroll-snap-align: start;
   margin: 0;
-  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
-  overflow: clip;
+  overflow: hidden;
   background: light-dark(var(--color-light), var(--color-gray-900));
   box-shadow: var(--shadow-card);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 main .related-articles .related-articles-card-link {
@@ -48,13 +53,13 @@ main .related-articles .related-articles-card-link {
   height: 100%;
 }
 
+/* Hide green strip */
 main .related-articles .related-articles-card-strip {
-  block-size: var(--space-s);
-  background: var(--color-accent);
+  display: none;
 }
 
 main .related-articles .related-articles-card-content {
-  padding: var(--space-m);
+  padding: var(--space-l);
   display: flex;
   flex-direction: column;
   gap: var(--space-s);
@@ -80,15 +85,16 @@ main .related-articles .related-articles-card-date {
 
 main .related-articles .related-articles-card:hover,
 main .related-articles .related-articles-card:focus-within {
-  transform: translateY(-2px);
+  transform: translateY(-5px);
   border-color: var(--color-accent);
-  box-shadow: 0 8px 20px rgb(0 0 0 / 10%);
+  box-shadow: 0 12px 24px light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 35%));
 }
 
 main .related-articles .related-articles-empty {
   margin: var(--space-m) 0 0;
 }
 
+/* Arrow controls */
 main .related-articles .related-articles-controls {
   display: flex;
   justify-content: space-between;
@@ -97,27 +103,30 @@ main .related-articles .related-articles-controls {
   transform: translateY(-50%);
   pointer-events: none;
   z-index: 2;
-  padding-inline: var(--space-xs);
 }
 
 main .related-articles .related-articles-arrow {
-  border: 1px solid light-dark(rgb(255 255 255 / 55%), rgb(255 255 255 / 16%));
-  background: light-dark(rgb(255 255 255 / 72%), rgb(24 27 32 / 70%));
+  border: 1px solid var(--color-border);
+  background: light-dark(rgb(255 255 255 / 90%), rgb(24 27 32 / 85%));
   color: inherit;
   inline-size: 44px;
   block-size: 44px;
   border-radius: 999px;
   padding: 0;
-  font-size: 22px;
+  font-size: var(--body-font-size-xl);
   line-height: 1;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 24px rgb(0 0 0 / 14%);
+  box-shadow: var(--shadow-card);
   pointer-events: auto;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+main .related-articles .related-articles-arrow:hover {
+  border-color: var(--color-accent);
 }
 
 main .related-articles .related-articles-arrow:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: default;
 }
 
@@ -128,28 +137,24 @@ main .related-articles .related-articles-arrow.is-hidden {
   transform: scale(0.9);
 }
 
+/* Tablet: 2 visible */
 @media (width >= 600px) {
   main .related-articles .related-articles-card {
-    flex-basis: min(88%, 360px);
+    flex: 0 0 calc((100% - var(--space-xl)) / 2);
   }
 }
 
+/* Desktop: 3 visible, scroll for the rest */
 @media (width >= 900px) {
   main .related-articles {
     padding-inline: 0;
   }
 
   main .related-articles .related-articles-card {
-    flex-basis: min(32%, 380px);
+    flex: 0 0 calc((100% - 2 * var(--space-xl)) / 3);
   }
 
   main .related-articles .related-articles-card-content {
-    padding: var(--space-l);
-  }
-
-  main .related-articles .related-articles-arrow {
-    inline-size: 52px;
-    block-size: 52px;
-    font-size: 24px;
+    padding: var(--space-xl);
   }
 }

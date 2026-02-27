@@ -1,13 +1,16 @@
 .tabs {
   color: var(--text-color);
+  background: var(--color-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
 }
 
-/* Full section width: break out of constrained content area */
+/* Contained card layout – match width of other content blocks */
 main .section.tabs,
 main .section .tabs {
-  width: 100vw;
-  max-width: none;
-  margin-inline: calc(50% - 50vw);
+  max-width: var(--grid-container-width);
+  margin-inline: auto;
   box-sizing: border-box;
 }
 
@@ -18,24 +21,20 @@ main .section .tabs {
 
 .tabs .tabs-wrapper {
   width: 100%;
-  max-width: var(--grid-container-width);
   margin: 0 auto;
 }
 
-.tabs.has-background .tabs-wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-/* Mobile-first: horizontally scrollable tabs for smaller screens. */
+/* Tab bar: gray background like Canvas design */
 .tabs .tabs-list {
   display: flex;
   align-items: center;
-  gap: var(--space-m);
-  margin: 0 0 var(--space-l);
-  padding: 0 var(--content-padding-inline) var(--space-xs);
+  gap: 0;
+  margin: 0;
+  padding: 0;
   overflow-x: auto;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tabs .tabs-list button {
@@ -44,16 +43,19 @@ main .section .tabs {
   border: 0;
   border-bottom: 3px solid transparent;
   box-sizing: border-box;
-  color: light-dark(var(--color-text-light), var(--color-gray-300));
+  color: var(--color-text-light);
   -webkit-text-fill-color: currentcolor;
   cursor: pointer;
-  font-size: var(--body-font-size-l);
+  flex: 1;
+  font-size: var(--body-font-size-m);
   font-weight: 600;
   margin: 0;
   min-height: 36px;
-  padding: var(--space-m) var(--space-l);
-  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
-  white-space: nowrap;
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 .tabs .tabs-list button.is-active,
@@ -61,11 +63,19 @@ main .section .tabs {
   color: var(--color-accent);
   -webkit-text-fill-color: var(--color-accent);
   border-bottom-color: var(--color-accent);
+  background-color: var(--color-light);
 }
 
+/* fadeIn animation for tab panels */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Tab panel content */
 .tabs .tabs-content {
-  margin-top: var(--space-m);
-  padding-bottom: var(--space-m);
+  margin-top: 0;
+  padding-bottom: 0;
 }
 
 .tabs .tab {
@@ -79,11 +89,12 @@ main .section .tabs {
 
 .tabs .tab[role='tabpanel'][aria-hidden='false'] {
   display: block;
+  animation: fade-in 0.4s ease;
 }
 
 .tabs .tab .section {
   margin: 0;
-  padding: var(--space-xl) var(--content-padding-inline);
+  padding: 50px var(--content-padding-inline);
 }
 
 .tabs .tab .section > :is(.default-content, .default-content-wrapper, .block-content) {
@@ -95,30 +106,50 @@ main .section .tabs {
   margin-block: var(--space-s);
 }
 
-.tabs .tab .section h2 {
-  font-size: var(--heading-font-size-m);
+.tabs .tab .section h2,
+.tabs .tab .section h3 {
+  font-size: var(--heading-font-size-s);
+  color: var(--color-brand);
 }
 
+.tabs .tab .section p,
+.tabs .tab .section li {
+  font-size: var(--body-font-size-m);
+}
+
+/* Background variant: override to Canvas gray-on-white look.
+   The background image is hidden; tabs use the same clean card style. */
 .tabs.has-background {
   position: relative;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: var(--color-light);
+  background-image: none !important;
+  background-color: var(--color-light);
+  color: var(--text-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
 }
 
 .tabs.has-background::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgb(15 23 42 / 65%);
-  pointer-events: none;
+  display: none;
 }
 
-.tabs.has-background a,
+.tabs.has-background .tabs-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.tabs.has-background .tabs-list {
+  background: var(--color-surface-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .tabs.has-background .tabs-list > button[role='tab'] {
-  color: var(--color-light);
-  -webkit-text-fill-color: var(--color-light);
+  color: var(--color-text-light);
+  -webkit-text-fill-color: currentcolor;
+}
+
+.tabs.has-background a {
+  color: inherit;
+  -webkit-text-fill-color: currentcolor;
 }
 
 .tabs.has-background .tabs-list > button.is-active,
@@ -126,6 +157,7 @@ main .section .tabs {
   color: var(--color-accent);
   -webkit-text-fill-color: var(--color-accent);
   border-bottom-color: var(--color-accent);
+  background-color: var(--color-light);
 }
 
 .tabs.has-background .tab .section {
@@ -143,15 +175,33 @@ main .section .tabs {
   -webkit-text-fill-color: var(--color-light);
 }
 
+/* Video-heavy columns inside tabs: 60/40 split when embed present */
 @media (width >= 900px) {
   .tabs {
-    padding-block: var(--space-xl);
+    padding-block: 0;
   }
 
   .tabs .tabs-list {
-    justify-content: center;
     overflow-x: visible;
-    padding-bottom: 0;
-    gap: var(--space-l);
+  }
+
+  .tabs .tabs-list button {
+    padding: 20px 30px;
+  }
+
+  .tabs .tab .section {
+    padding: 50px var(--content-padding-inline);
+  }
+
+  .tabs .columns > div:has(.embed) {
+    align-items: flex-start;
+  }
+
+  .tabs .columns > div:has(.embed) > div:has(.embed) {
+    flex: 3;
+  }
+
+  .tabs .columns > div:has(.embed) > div:not(:has(.embed)) {
+    flex: 2;
   }
 }

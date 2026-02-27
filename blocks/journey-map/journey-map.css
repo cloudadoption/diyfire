@@ -63,7 +63,7 @@
   border: 2px solid light-dark(var(--color-gray-300), var(--color-gray-600));
   display: grid;
   place-items: center;
-  font-size: 12px;
+  font-size: var(--body-font-size-xs);
   font-weight: 700;
   line-height: 1;
   color: var(--color-light);

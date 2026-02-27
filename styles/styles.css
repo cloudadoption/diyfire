@@ -94,7 +94,7 @@
   --color-dark: rgb(0 0 0);
   --color-text: light-dark(var(--color-dark), var(--color-light));
   --color-link: light-dark(var(--color-gray-900), var(--color-gray-100));
-  --color-link-hover: light-dark(#059669, var(--color-green-300));
+  --color-link-hover: light-dark(var(--color-accent-hover), var(--color-green-300));
   --color-brand: #0f172a;
   --color-accent: #10b981;
   --color-text-main: #1e293b;
@@ -103,10 +103,13 @@
 
   /* fonts */
   --font-family: montserrat, "Trebuchet MS", sans-serif;
-  --body-font-family: adobe-clean, montserrat, "Trebuchet MS", sans-serif;
+  --body-font-family: source-sans-3, montserrat, "Trebuchet MS", sans-serif;
   --heading-font-family: var(--font-family);
 
   /* shared component tokens */
+  --color-border: light-dark(#e2e8f0, var(--color-gray-700));
+  --color-surface-muted: light-dark(#f8fafc, var(--color-gray-800));
+  --color-accent-hover: #059669;
   --border-radius-lg: 16px;
   --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 5%);
   --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 10%);
@@ -219,7 +222,7 @@ body.theme-dark {
 
 html {
   min-height: 100%;
-  scroll-padding-top: calc(var(--nav-height) + 1rem);
+  scroll-padding-top: calc(var(--nav-height) + 16px);
 }
 
 body {
@@ -386,8 +389,8 @@ a.button:any-link:hover,
 a.button:any-link:focus-visible,
 button.button:hover,
 button.button:focus-visible {
-  background-color: #059669;
-  border-color: #059669;
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
   cursor: pointer;
   text-decoration: none;
 }
