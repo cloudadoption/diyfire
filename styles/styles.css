@@ -478,7 +478,7 @@ main img:not([width], [height]) {
 
 /* sections – boilerplate structure with design tokens */
 main > .section {
-  margin: inherit;
+  margin: 0;
 
   /* Reduce CLS: contain layout so section appearance causes less reflow.
      Exclude social-share section: contain creates a containing block for position:fixed,
@@ -500,8 +500,16 @@ main > .section > div {
 main .section.light,
 main .section.highlight {
   background-color: var(--light-color);
-  margin: 0;
-  padding: var(--section-block-space) 0;
+}
+
+/* Alternating section backgrounds: even sections get shaded (light scheme) */
+main > .section:nth-child(even) {
+  background-color: var(--color-shaded);
+
+  /* Override component tokens so child blocks auto-adapt on shaded bg */
+  --color-border: light-dark(var(--color-light), var(--color-gray-600));
+  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 3%);
+  --color-surface-muted: light-dark(var(--color-light), var(--color-gray-900));
 }
 
 /* section-metadata style=divider: content-width (grid) border-bottom */

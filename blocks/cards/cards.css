@@ -1,3 +1,7 @@
+.cards {
+  padding-bottom: var(--section-block-space);
+}
+
 .cards > ul {
   list-style: none;
   margin: 0;
