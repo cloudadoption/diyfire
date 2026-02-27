@@ -1,14 +1,14 @@
 footer {
   width: 100%;
-  border-top: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
-  background-color: var(--light-color);
+  background-color: var(--color-brand);
+  color: var(--color-light);
   font-size: var(--body-font-size-xs);
 }
 
 footer .footer > div {
   max-width: var(--grid-container-width);
   margin: 0 auto;
-  padding: var(--space-xl) var(--content-padding-inline);
+  padding: 60px var(--content-padding-inline);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-l);
@@ -24,9 +24,17 @@ footer .footer p {
   line-height: 1.55;
 }
 
+footer .footer a:any-link {
+  color: var(--color-light);
+}
+
+footer .footer a:hover {
+  color: var(--color-accent);
+}
+
 footer .footer > div > div:first-child {
   padding-bottom: var(--space-l);
-  border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-600));
+  border-bottom: 1px solid rgb(255 255 255 / 15%);
 }
 
 footer .footer > div > div:nth-child(2) p {
@@ -38,6 +46,7 @@ footer .footer > div > div:nth-child(3) {
   align-items: center;
   gap: var(--space-m);
   min-width: 0;
+  opacity: 0.7;
 }
 
 footer .footer > div > div:nth-child(4) {
@@ -68,12 +77,13 @@ footer .footer > div > div:nth-child(4) ul a {
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  border: 1px solid light-dark(var(--color-gray-300), var(--color-gray-500));
+  border: 1px solid rgb(255 255 255 / 25%);
 }
 
 footer .footer > div > div:nth-child(4) ul a:hover,
 footer .footer > div > div:nth-child(4) ul a:focus-visible {
-  background-color: light-dark(var(--color-gray-100), var(--color-gray-700));
+  background-color: rgb(255 255 255 / 10%);
+  border-color: var(--color-accent);
 }
 
 footer .footer .icon {
@@ -94,28 +104,14 @@ footer .footer .icon.icon-logo :is(svg, img) {
   object-fit: contain;
 }
 
-@media (prefers-color-scheme: dark) {
-  footer .footer > div > div:nth-child(4) ul .icon {
-    filter: brightness(0) invert(1);
-  }
-}
-
-body.dark-scheme footer .footer > div > div:nth-child(4) ul .icon,
-body.dark footer .footer > div > div:nth-child(4) ul .icon,
-body.theme-dark footer .footer > div > div:nth-child(4) ul .icon {
+/* Footer is always dark, so always invert icons */
+footer .footer > div > div:nth-child(4) ul .icon {
   filter: brightness(0) invert(1);
-}
-
-body.light-scheme footer .footer > div > div:nth-child(4) ul .icon,
-body.light footer .footer > div > div:nth-child(4) ul .icon,
-body.theme-light footer .footer > div > div:nth-child(4) ul .icon {
-  filter: none;
 }
 
 @media (width >= 600px) {
   footer .footer > div {
     grid-template-columns: minmax(0, 1fr) auto;
-    padding-block: calc(var(--space-xl) + var(--space-s));
   }
 
   footer .footer > div > div:nth-child(1),
@@ -136,6 +132,5 @@ body.theme-light footer .footer > div > div:nth-child(4) ul .icon {
 @media (width >= 900px) {
   footer .footer > div {
     gap: var(--space-xl);
-    padding-block: calc(var(--space-xl) + var(--space-m));
   }
 }

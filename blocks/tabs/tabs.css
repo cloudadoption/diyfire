@@ -42,23 +42,25 @@ main .section .tabs {
   appearance: none;
   background-color: transparent;
   border: 0;
-  border-bottom: 2px solid transparent;
+  border-bottom: 3px solid transparent;
   box-sizing: border-box;
-  color: inherit;
+  color: light-dark(var(--color-text-light), var(--color-gray-300));
   -webkit-text-fill-color: currentcolor;
   cursor: pointer;
   font-size: var(--body-font-size-l);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
   min-height: 36px;
-  padding: var(--space-xs) var(--space-m);
-  transition: border-color 0.2s ease-in-out;
+  padding: var(--space-m) var(--space-l);
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
   white-space: nowrap;
 }
 
 .tabs .tabs-list button.is-active,
 .tabs .tabs-list button[aria-selected='true'] {
-  border-bottom-color: light-dark(var(--color-dark), var(--color-light));
+  color: var(--color-accent);
+  -webkit-text-fill-color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
 
 .tabs .tabs-content {
@@ -109,7 +111,7 @@ main .section .tabs {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgb(0 0 0 / 35%);
+  background: rgb(15 23 42 / 65%);
   pointer-events: none;
 }
 
@@ -117,6 +119,13 @@ main .section .tabs {
 .tabs.has-background .tabs-list > button[role='tab'] {
   color: var(--color-light);
   -webkit-text-fill-color: var(--color-light);
+}
+
+.tabs.has-background .tabs-list > button.is-active,
+.tabs.has-background .tabs-list > button[aria-selected='true'] {
+  color: var(--color-accent);
+  -webkit-text-fill-color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
 }
 
 .tabs.has-background .tab .section {

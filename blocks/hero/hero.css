@@ -10,8 +10,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-l);
-  min-height: 280px;
-  padding: var(--space-xl) var(--content-padding-inline);
+  min-height: 320px;
+  padding: 80px var(--content-padding-inline);
 }
 
 .hero h1,
@@ -31,10 +31,11 @@
 .hero h1 {
   max-width: var(--grid-container-width);
   margin: 0 auto;
-  font-size: 2.25rem;
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 .hero > div:last-child > div {
@@ -50,10 +51,11 @@
   gap: var(--space-s);
   max-width: var(--grid-container-width);
   margin: 0 auto;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 50%);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-shadow: none;
+  opacity: 0.9;
 }
 
 .hero picture {
@@ -67,7 +69,6 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
-  filter: blur(2px);
 }
 
 .hero .icon {
@@ -87,26 +88,20 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: rgb(0 0 0 / 45%);
+  background: rgb(15 23 42 / 75%);
   pointer-events: none;
 }
 
 @media (width >= 600px) {
   .hero {
-    min-height: 320px;
-  }
-
-  .hero h1 {
-    font-size: 3rem;
+    min-height: 380px;
+    padding: 100px var(--content-padding-inline);
   }
 }
 
 @media (width >= 900px) {
   .hero {
-    min-height: 400px;
-  }
-
-  .hero h1 {
-    font-size: 3.5rem;
+    min-height: 440px;
+    padding: 140px var(--content-padding-inline) 160px;
   }
 }

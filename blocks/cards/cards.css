@@ -4,7 +4,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-l);
+  gap: var(--space-xl);
   width: 100%;
   max-width: 340px;
   margin-inline: auto;
@@ -12,17 +12,19 @@
 
 /* Card item */
 .cards > ul > li {
-  border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border: 1px solid light-dark(#e2e8f0, var(--color-gray-700));
   background-color: light-dark(var(--color-light), var(--color-gray-900));
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .cards > ul > li:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
+  border-color: var(--color-accent);
   box-shadow: 0 12px 24px light-dark(rgb(0 0 0 / 10%), rgb(0 0 0 / 35%));
 }
 
@@ -65,7 +67,7 @@
 
 /* Body */
 .cards .cards-card-body {
-  padding: var(--space-m);
+  padding: var(--space-l);
   flex-grow: 1;
 }
 
@@ -81,7 +83,7 @@
 /* Desktop: auto-fill columns */
 @media (width >= 900px) {
   .cards > ul {
-    grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 
   .cards > ul > li {
@@ -89,7 +91,7 @@
   }
 
   .cards .cards-card-body {
-    padding: var(--space-l);
+    padding: var(--space-xl);
   }
 }
 

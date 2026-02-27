@@ -34,9 +34,9 @@ header {
   --nav-bg-mega: var(--color-shaded);
   --nav-bg-hover-item: var(--light-color);
 
-  /* header uses neutral hover color, not link blue */
-  --nav-hover-color: light-dark(var(--color-gray-800), var(--color-gray-200));
-  --nav-focus-color: light-dark(var(--color-gray-700), var(--color-gray-300));
+  /* header uses neutral hover color, with green accent tint */
+  --nav-hover-color: light-dark(var(--color-brand), var(--color-gray-200));
+  --nav-focus-color: light-dark(var(--color-accent), var(--color-gray-300));
 
   /* desktop-only (overridden in @media 900px) */
   --nav-desktop-max-width: 1264px;
@@ -57,9 +57,8 @@ header .nav-wrapper {
   top: 0;
   left: 0;
   right: 0;
-  border-bottom: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
+  border-bottom: 1px solid light-dark(#e2e8f0, var(--color-gray-700));
   box-shadow: 0 1px 3px rgb(0 0 0 / 4%);
-  backdrop-filter: saturate(180%) blur(12px);
 }
 
 /* mobile: base layout */

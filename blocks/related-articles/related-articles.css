@@ -33,9 +33,10 @@ main .related-articles .related-articles-card {
   scroll-snap-align: start;
   margin: 0;
   border: 1px solid light-dark(var(--color-gray-200), var(--color-gray-700));
-  border-radius: var(--space-m);
+  border-radius: var(--border-radius-lg);
   overflow: clip;
   background: light-dark(var(--color-light), var(--color-gray-900));
+  box-shadow: var(--shadow-card);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 

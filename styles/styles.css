@@ -94,15 +94,22 @@
   --color-dark: rgb(0 0 0);
   --color-text: light-dark(var(--color-dark), var(--color-light));
   --color-link: light-dark(var(--color-gray-900), var(--color-gray-100));
-  --color-link-hover: light-dark(var(--color-blue-600), var(--color-blue-300));
-  --color-brand: var(--color-purple-500);
-  --color-accent: #396077;
-  --color-shaded: light-dark(#f9f9f9, #111);
+  --color-link-hover: light-dark(#059669, var(--color-green-300));
+  --color-brand: #0f172a;
+  --color-accent: #10b981;
+  --color-text-main: #1e293b;
+  --color-text-light: #64748b;
+  --color-shaded: light-dark(#f8fafc, #111);
 
   /* fonts */
   --font-family: montserrat, "Trebuchet MS", sans-serif;
-  --body-font-family: var(--font-family);
+  --body-font-family: adobe-clean, montserrat, "Trebuchet MS", sans-serif;
   --heading-font-family: var(--font-family);
+
+  /* shared component tokens */
+  --border-radius-lg: 16px;
+  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 5%);
+  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 10%);
 
   /* heading sizes */
   --heading-font-size-xxl: 32.44px;
@@ -258,6 +265,7 @@ h6 {
   font-weight: 600;
   line-height: var(--heading-line-height);
   scroll-margin: 40px;
+  color: light-dark(var(--color-brand), var(--color-light));
 }
 
 h1 { font-size: var(--heading-font-size-xxl); }
@@ -342,7 +350,7 @@ button.button {
   gap: var(--space-xs);
   max-width: 100%;
   margin: 0;
-  border: 1px solid var(--link-color);
+  border: 1px solid var(--color-accent);
   border-radius: 999px;
   padding: 0.625em 1.125em;
   font: inherit;
@@ -350,8 +358,8 @@ button.button {
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
-  background-color: var(--link-color);
-  color: var(--background-color);
+  background-color: var(--color-accent);
+  color: var(--color-light);
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -378,8 +386,8 @@ a.button:any-link:hover,
 a.button:any-link:focus-visible,
 button.button:hover,
 button.button:focus-visible {
-  background-color: var(--link-hover-color);
-  border-color: var(--link-hover-color);
+  background-color: #059669;
+  border-color: #059669;
   cursor: pointer;
   text-decoration: none;
 }
@@ -395,7 +403,7 @@ button.button.primary:focus-visible {
 
 a.button:any-link:focus-visible,
 button.button:focus-visible {
-  outline: 2px solid var(--link-color);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
