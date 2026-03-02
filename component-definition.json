@@ -1,0 +1,431 @@
+{
+  "groups": [
+    {
+      "title": "Default Content",
+      "id": "default",
+      "components": [
+        {
+          "title": "Text",
+          "id": "text",
+          "model": "text",
+          "plugins": {
+            "da": {
+              "name": "text",
+              "type": "text"
+            }
+          }
+        },
+        {
+          "title": "Image",
+          "id": "image",
+          "model": "image",
+          "plugins": {
+            "da": {
+              "name": "image",
+              "type": "image",
+              "fields": [
+                {
+                  "name": "image",
+                  "selector": "img[src]"
+                },
+                {
+                  "name": "imageAlt",
+                  "selector": "img[alt]"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Sections",
+      "id": "sections",
+      "components": [
+        {
+          "title": "Section",
+          "id": "section",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div></div>"
+            }
+          },
+          "filter": "section",
+          "model": "section"
+        }
+      ]
+    },
+    {
+      "title": "Blocks",
+      "id": "blocks",
+      "components": [
+        {
+          "title": "Cards",
+          "id": "cards",
+          "model": "cards",
+          "filter": "cards",
+          "plugins": {
+            "da": {
+              "name": "cards",
+              "rows": 1,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "Card Item",
+          "id": "cards-item",
+          "model": "cards-item",
+          "plugins": {
+            "da": {
+              "name": "cards-item",
+              "rows": 1,
+              "columns": 2,
+              "fields": [
+                {
+                  "name": "image",
+                  "selector": "div:nth-child(1)>picture>img[src]"
+                },
+                {
+                  "name": "imageAlt",
+                  "selector": "div:nth-child(1)>picture>img[alt]"
+                },
+                {
+                  "name": "text",
+                  "selector": "div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Card Item (no image)",
+          "id": "cards-item-noimage",
+          "model": "cards-item-noimage",
+          "plugins": {
+            "da": {
+              "name": "cards-item-noimage",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "text",
+                  "selector": "div:nth-child(1)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Columns",
+          "id": "columns",
+          "model": "columns",
+          "filter": "columns",
+          "plugins": {
+            "da": {
+              "name": "columns",
+              "rows": 1,
+              "columns": 2,
+              "behaviour": "columns"
+            }
+          }
+        },
+        {
+          "title": "Columns Row",
+          "id": "columns-row",
+          "model": "columns-row",
+          "filter": "columns-row",
+          "plugins": {
+            "da": {
+              "name": "columns-row",
+              "behaviour": "columns-row"
+            }
+          }
+        },
+        {
+          "title": "Columns Cell",
+          "id": "columns-cell",
+          "model": "columns-cell",
+          "filter": "columns-cell",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div></div>",
+              "behaviour": "columns-cell"
+            }
+          }
+        },
+        {
+          "title": "Embed (with placeholder)",
+          "id": "embed",
+          "model": "embed",
+          "plugins": {
+            "da": {
+              "name": "embed",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "image",
+                  "selector": "div>div>picture>img[src]"
+                },
+                {
+                  "name": "imageAlt",
+                  "selector": "div>div>picture>img[alt]"
+                },
+                {
+                  "name": "embedUrl",
+                  "selector": "div>div>p>a[href]"
+                },
+                {
+                  "name": "embedUrlText",
+                  "selector": "div>div>p>a"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Embed (no placeholder)",
+          "id": "embed-no-placeholder",
+          "model": "embed-no-placeholder",
+          "plugins": {
+            "da": {
+              "name": "embed",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "embedUrl",
+                  "selector": "div>div>p>a[href]"
+                },
+                {
+                  "name": "embedUrlText",
+                  "selector": "div>div>p>a"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Form",
+          "id": "form",
+          "model": "form",
+          "plugins": {
+            "da": {
+              "name": "form",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "source",
+                  "selector": "div>div>p:nth-child(1)>a[href]"
+                },
+                {
+                  "name": "sourceText",
+                  "selector": "div>div>p:nth-child(1)>a"
+                },
+                {
+                  "name": "action",
+                  "selector": "div>div>p:nth-child(2)>a[href]"
+                },
+                {
+                  "name": "actionText",
+                  "selector": "div>div>p:nth-child(2)>a"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Fragment",
+          "id": "fragment",
+          "model": "fragment",
+          "plugins": {
+            "da": {
+              "name": "fragment",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "reference",
+                  "selector": "div>div>p>a[href]"
+                },
+                {
+                  "name": "referenceText",
+                  "selector": "div>div>p>a"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Hero",
+          "id": "hero",
+          "model": "hero",
+          "plugins": {
+            "da": {
+              "name": "hero",
+              "rows": 2,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "image",
+                  "selector": "div:nth-child(1)>div>picture>img[src]"
+                },
+                {
+                  "name": "imageAlt",
+                  "selector": "div:nth-child(1)>div>picture>img[alt]"
+                },
+                {
+                  "name": "heading",
+                  "selector": "div:nth-child(2)>div>h1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Journey Map",
+          "id": "journey-map",
+          "model": "journey-map",
+          "filter": "journey-map",
+          "plugins": {
+            "da": {
+              "name": "journey-map",
+              "rows": 1,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "Journey Map Step",
+          "id": "journey-map-step",
+          "model": "journey-map-step",
+          "plugins": {
+            "da": {
+              "name": "journey-map-step",
+              "rows": 1,
+              "columns": 2,
+              "fields": [
+                {
+                  "name": "title",
+                  "selector": "div:nth-child(1)"
+                },
+                {
+                  "name": "content",
+                  "selector": "div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Modal",
+          "id": "modal",
+          "model": "modal",
+          "plugins": {
+            "da": {
+              "name": "modal",
+              "type": "text",
+              "unsafeHTML": "<p><a href=\"/fragments/\">Contact Us</a></p>"
+            }
+          }
+        },
+        {
+          "title": "Related Articles (dynamic)",
+          "id": "related-articles",
+          "model": "related-articles",
+          "plugins": {
+            "da": {
+              "name": "related-articles",
+              "rows": 2,
+              "columns": 2,
+              "fields": [
+                {
+                  "name": "keywords",
+                  "selector": "div:nth-child(1)>div:nth-child(2)"
+                },
+                {
+                  "name": "excluded-keywords",
+                  "selector": "div:nth-child(2)>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Related Articles (links)",
+          "id": "related-articles-links",
+          "model": "related-articles-links",
+          "plugins": {
+            "da": {
+              "name": "related-articles",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "links",
+                  "selector": "div>div>ul"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Search",
+          "id": "search",
+          "model": "search",
+          "plugins": {
+            "da": {
+              "name": "search",
+              "rows": 7,
+              "columns": 2
+            }
+          }
+        },
+        {
+          "title": "Social Share",
+          "id": "social-share",
+          "model": "social-share",
+          "plugins": {
+            "da": {
+              "name": "social-share",
+              "rows": 0,
+              "columns": 0
+            }
+          }
+        },
+        {
+          "title": "Tabs",
+          "id": "tabs",
+          "model": "tabs",
+          "plugins": {
+            "da": {
+              "name": "tabs",
+              "rows": 1,
+              "columns": 1
+            }
+          }
+        },
+        {
+          "title": "Teaser",
+          "id": "teaser",
+          "model": "teaser",
+          "plugins": {
+            "da": {
+              "name": "teaser",
+              "rows": 1,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "text",
+                  "selector": "div>div>p"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
