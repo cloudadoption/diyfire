@@ -339,25 +339,64 @@
     "id": "related-articles",
     "fields": [
       {
+        "component": "select",
+        "name": "classes",
+        "label": "Variation",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          {
+            "name": "Links",
+            "value": "links"
+          },
+          {
+            "name": "Dynamic",
+            "value": "dynamic"
+          }
+        ],
+        "description": "Links: specify article URLs. Dynamic: match articles by keywords."
+      },
+      {
         "component": "richtext",
         "name": "links",
         "label": "Article Links",
-        "valueType": "string",
-        "description": "A list of links to specific articles. When present, block uses links mode; otherwise uses keywords."
+        "description": "A list of links to specific articles.",
+        "condition": {
+          "===": [
+            {
+              "var": "classes"
+            },
+            "links"
+          ]
+        }
       },
       {
         "component": "text",
         "name": "keywords",
         "label": "Keywords",
-        "valueType": "string",
-        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles. Used when no links are authored."
+        "description": "Comma-separated keywords to match articles (e.g. fire, tfsa, rrsp). Use 'random' for random articles.",
+        "condition": {
+          "===": [
+            {
+              "var": "classes"
+            },
+            "dynamic"
+          ]
+        }
       },
       {
         "component": "text",
         "name": "excluded-keywords",
         "label": "Excluded Keywords",
-        "valueType": "string",
-        "description": "Comma-separated keywords to exclude (e.g. external)"
+        "description": "Comma-separated keywords to exclude (e.g. external)",
+        "condition": {
+          "===": [
+            {
+              "var": "classes"
+            },
+            "dynamic"
+          ]
+        }
       }
     ]
   },

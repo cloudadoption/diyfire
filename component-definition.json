@@ -272,22 +272,7 @@
           "plugins": {
             "da": {
               "name": "related-articles",
-              "rows": 2,
-              "columns": 2,
-              "fields": [
-                {
-                  "name": "links",
-                  "selector": "div:nth-child(1)>div:nth-child(1)>ul"
-                },
-                {
-                  "name": "keywords",
-                  "selector": "div:nth-child(1)>div:nth-child(2)"
-                },
-                {
-                  "name": "excluded-keywords",
-                  "selector": "div:nth-child(2)>div:nth-child(2)"
-                }
-              ]
+              "type": "key-value-block"
             }
           }
         },
