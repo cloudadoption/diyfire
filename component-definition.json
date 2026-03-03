@@ -174,11 +174,11 @@
               "fields": [
                 {
                   "name": "source",
-                  "selector": "div>div:nth-child(1)>p"
+                  "selector": "div:nth-child(1)>div>p"
                 },
                 {
                   "name": "actionUrl",
-                  "selector": "div>div:nth-child(2)>p"
+                  "selector": "div:nth-child(2)>div>p"
                 }
               ]
             }
