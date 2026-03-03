@@ -278,9 +278,8 @@
     "fields": [
       {
         "component": "richtext",
-        "name": "reference",
+        "name": "url",
         "label": "Fragment Path",
-        "valueType": "string",
         "required": true,
         "description": "Path to the fragment"
       }

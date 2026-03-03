@@ -10,7 +10,7 @@
           "rows": 1,
           "columns": 1,
           "fields": [
-            { "name": "reference", "selector": "div>div>p" }
+            { "name": "url", "selector": "div>div>p" }
           ]
         }
       }
@@ -22,9 +22,8 @@
       "fields": [
         {
           "component": "richtext",
-          "name": "reference",
+          "name": "url",
           "label": "Fragment Path",
-          "valueType": "string",
           "required": true,
           "description": "Path to the fragment"
         }

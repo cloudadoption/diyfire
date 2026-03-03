@@ -195,7 +195,7 @@
               "columns": 1,
               "fields": [
                 {
-                  "name": "reference",
+                  "name": "url",
                   "selector": "div>div>p"
                 }
               ]
