@@ -250,8 +250,8 @@
           "plugins": {
             "da": {
               "name": "journey-map-step",
-              "rows": 2,
-              "columns": 0,
+              "rows": 1,
+              "columns": 2,
               "fields": [
                 {
                   "name": "title",
