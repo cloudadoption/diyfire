@@ -7,7 +7,7 @@
       "plugins": {
         "da": {
           "name": "form",
-          "rows": 1,
+          "rows": 2,
           "columns": 1,
           "fields": [
             { "name": "source", "selector": "div:nth-child(1)>div>p" },
