@@ -7,20 +7,38 @@
 
 .hero {
   position: relative;
-  background-color: var(--color-parchment);
+  background-color: light-dark(var(--color-parchment), var(--color-obsidian));
 }
 
 /* Image */
-.hero > div:first-child {
+.hero > div:first-child,
+.hero .hero-img-light,
+.hero .hero-img-dark {
   line-height: 0;
+}
+
+/* Dual-image hero: light shown by default, dark hidden */
+.hero .hero-img-dark {
+  display: none;
+}
+
+/* Dark theme: swap images (must match light-dark() triggers, not OS preference) */
+.dark-scheme .hero .hero-img-light,
+:root[data-theme='dark'] .hero .hero-img-light {
+  display: none;
+}
+
+.dark-scheme .hero .hero-img-dark,
+:root[data-theme='dark'] .hero .hero-img-dark {
+  display: block;
 }
 
 .hero picture img {
   display: block;
+  width: 100%;
   max-height: 520px;
   object-fit: cover;
   opacity: 0.5;
-  margin-inline: auto;
 }
 
 /* Text overlay */
@@ -59,13 +77,13 @@
   font-size: clamp(2rem, 8vw, 4.5rem);
   font-weight: 500;
   line-height: 1.05;
-  color: var(--color-ink);
+  color: light-dark(var(--color-ink), var(--color-parchment));
 }
 
 .hero h1 em {
   font-weight: 400;
   font-style: italic;
-  color: var(--color-rust);
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
 }
 
 /* Body text — hidden on mobile */
@@ -75,7 +93,7 @@
   margin: 0;
   font-family: var(--font-family-serif);
   font-size: 1.1rem;
-  color: var(--color-ink);
+  color: light-dark(var(--color-ink), var(--color-muted));
   line-height: 1.7;
 }
 
@@ -94,6 +112,13 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/* Dark-mode image: blend into obsidian bg with soft edges */
+.dark-scheme .hero .hero-img-dark picture img,
+:root[data-theme='dark'] .hero .hero-img-dark picture img {
+  opacity: 0.35;
+  mask-image: radial-gradient(ellipse 80% 65% at 50% 40%, black 30%, transparent 100%);
 }
 
 /* Tablet: show body text */

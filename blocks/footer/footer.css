@@ -1,7 +1,8 @@
 footer {
   width: 100%;
-  background-color: var(--color-rust);
-  color: var(--color-light);
+  background-color: light-dark(var(--color-rust), #080d0d);
+  color: var(--color-parchment);
+  border-top: light-dark(none, var(--border-heritage));
   font-size: var(--body-font-size-xs);
 }
 
@@ -94,7 +95,7 @@ footer .footer > div > div:nth-child(4) li {
 }
 
 footer .footer a:any-link {
-  color: var(--color-light);
+  color: var(--color-parchment);
 }
 
 footer .footer > div > div:nth-child(4) a {

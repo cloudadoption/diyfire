@@ -1,7 +1,7 @@
 /* Teaser block – Heritage Elite */
 
 main .teaser {
-  background: light-dark(var(--color-parchment), var(--color-gray-900));
+  background: light-dark(var(--color-parchment), var(--color-card-dark));
   border: var(--border-heritage);
   border-radius: var(--border-radius-heritage);
   text-align: center;
@@ -18,7 +18,7 @@ main .teaser > div {
 }
 
 main .teaser > div > div a {
-  color: var(--color-rust);
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
   text-decoration: underline;
   text-underline-offset: 0.15em;
   text-decoration-color: var(--color-gold);

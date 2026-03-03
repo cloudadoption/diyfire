@@ -29,10 +29,10 @@ header {
   --nav-bg: var(--background-color);
   --nav-bg-hover: var(--header-hover-bg);
   --nav-bg-link-hover: var(--header-link-hover-bg);
-  --nav-bg-dropdown: var(--background-color);
-  --nav-bg-dropdown-mobile: light-dark(var(--color-gray-100), var(--color-gray-800));
-  --nav-bg-mega: var(--color-shaded);
-  --nav-bg-hover-item: var(--light-color);
+  --nav-bg-dropdown: light-dark(var(--background-color), var(--color-card-dark));
+  --nav-bg-dropdown-mobile: light-dark(var(--color-gray-100), var(--color-card-dark));
+  --nav-bg-mega: light-dark(var(--color-parchment), var(--color-obsidian));
+  --nav-bg-hover-item: light-dark(var(--light-color), var(--color-card-dark));
 
   /* header uses neutral hover color */
   --nav-hover-color: light-dark(var(--color-rust), var(--color-gold));
@@ -50,7 +50,7 @@ header {
 }
 
 header .nav-wrapper {
-  background-color: #faf8f5;
+  background-color: light-dark(#faf8f5, var(--color-obsidian));
   width: 100%;
   z-index: 1000;
   position: fixed;
@@ -914,7 +914,7 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
     top: var(--mega-top, var(--nav-height, 64px));
     padding: var(--space-xl) var(--space-xl);
     border-bottom: var(--border-heritage);
-    background-color: #faf8f5;
+    background-color: light-dark(#faf8f5, var(--color-obsidian));
     color: var(--text-color);
     box-shadow: var(--header-drop-shadow);
     z-index: 999;

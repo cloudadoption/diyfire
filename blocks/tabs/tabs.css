@@ -35,7 +35,7 @@ main .section .tabs {
 .tabs .tabs-wrapper .section p {
   font-family: var(--font-family-serif);
   font-size: 1.1rem;
-  color: var(--color-ink);
+  color: light-dark(var(--color-ink), var(--color-muted));
   opacity: 0.7;
   margin-top: 20px;
   text-align: center;
@@ -51,7 +51,7 @@ main .section .tabs {
   padding: 0 var(--content-padding-inline) var(--space-xs);
   overflow-x: auto;
   scrollbar-width: thin;
-  border-bottom: 1px solid rgb(161 79 43 / 15%);
+  border-bottom: var(--border-heritage);
 }
 
 .tabs .tabs-list button {
@@ -59,7 +59,7 @@ main .section .tabs {
   background: transparent;
   border: 0;
   border-bottom: 3px solid transparent;
-  color: var(--color-ink);
+  color: light-dark(var(--color-ink), var(--color-muted));
   -webkit-text-fill-color: currentcolor;
   cursor: pointer;
   font-family: var(--body-font-family);
@@ -76,10 +76,10 @@ main .section .tabs {
 
 .tabs .tabs-list button.is-active,
 .tabs .tabs-list button[aria-selected='true'] {
-  color: var(--color-rust);
-  -webkit-text-fill-color: var(--color-rust);
+  color: light-dark(var(--color-rust), var(--color-rust-bright));
+  -webkit-text-fill-color: light-dark(var(--color-rust), var(--color-rust-bright));
   opacity: 1;
-  border-bottom-color: var(--color-rust);
+  border-bottom-color: light-dark(var(--color-rust), var(--color-rust-bright));
 }
 
 .tabs .tabs-list button:hover {
@@ -115,7 +115,7 @@ main .section .tabs {
   font-family: var(--font-family-serif);
   font-weight: 500;
   font-size: var(--heading-font-size-m);
-  color: var(--color-ink);
+  color: light-dark(var(--color-ink), var(--color-parchment));
 }
 
 .tabs .tab .section > :is(.default-content, .default-content-wrapper, .block-content) {
@@ -143,8 +143,10 @@ main .section .tabs {
 
 .tabs .columns .embed {
   max-width: 100%;
+  border: var(--border-heritage);
   border-radius: var(--border-radius-heritage);
   overflow: hidden;
+  background: light-dark(transparent, var(--color-card-dark));
 }
 
 /* Columns text — left aligned */

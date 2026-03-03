@@ -46,6 +46,12 @@
   --color-parchment: #f5f2ed;
   --color-ink: #1a1a1a;
 
+  /* heritage dark palette */
+  --color-obsidian: #0d1414;
+  --color-card-dark: #162121;
+  --color-rust-bright: #d16a3e;
+  --color-muted: #8b9a9a;
+
   /* color tokens – grays and palette */
   --color-gray-100: #f1f1f1;
   --color-gray-200: #d3d3d3;
@@ -98,12 +104,12 @@
   /* semantic / named colors */
   --color-light: rgb(255 255 255);
   --color-dark: rgb(0 0 0);
-  --color-text: light-dark(var(--color-ink), var(--color-light));
-  --color-link: light-dark(var(--color-ink), var(--color-gray-100));
+  --color-text: light-dark(var(--color-ink), var(--color-parchment));
+  --color-link: light-dark(var(--color-ink), var(--color-parchment));
   --color-link-hover: light-dark(var(--color-rust), var(--color-gold));
   --color-brand: var(--color-rust);
   --color-accent: var(--color-gold);
-  --color-shaded: light-dark(var(--color-parchment), #111);
+  --color-shaded: light-dark(var(--color-parchment), var(--color-card-dark));
 
   /* fonts */
   --font-family: montserrat, "Trebuchet MS", sans-serif;
@@ -136,7 +142,7 @@
   --header-height: var(--nav-height);
 
   /* boilerplate compatibility – map to design tokens */
-  --background-color: light-dark(var(--color-parchment), var(--color-dark));
+  --background-color: light-dark(var(--color-parchment), var(--color-obsidian));
   --light-color: var(--color-shaded);
   --dark-color: var(--color-gray-500);
   --text-color: var(--color-text);
@@ -144,7 +150,7 @@
   --link-hover-color: var(--color-link-hover);
 
   /* heritage border */
-  --border-heritage: 1px solid rgb(161 79 43 / 15%);
+  --border-heritage: 1px solid light-dark(rgb(161 79 43 / 15%), rgb(245 242 237 / 10%));
   --border-radius-heritage: 24px;
 }
 
@@ -354,7 +360,7 @@ button.button {
   gap: var(--space-xs);
   max-width: 100%;
   margin: 0;
-  border: 1px solid var(--color-rust);
+  border: 1px solid light-dark(var(--color-rust), var(--color-rust-bright));
   border-radius: 4px;
   padding: 20px 50px;
   font: inherit;
@@ -365,7 +371,7 @@ button.button {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 2px;
-  background-color: var(--color-rust);
+  background-color: light-dark(var(--color-rust), var(--color-rust-bright));
   color: var(--color-light);
   cursor: pointer;
   overflow: hidden;
@@ -396,7 +402,7 @@ button.button:focus-visible {
   background-color: var(--color-gold);
   border-color: var(--color-gold);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgb(161 79 43 / 20%);
+  box-shadow: 0 10px 20px light-dark(rgb(161 79 43 / 20%), rgb(209 106 62 / 25%));
   cursor: pointer;
   text-decoration: none;
 }

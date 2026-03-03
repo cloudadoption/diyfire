@@ -22,7 +22,7 @@ main .related-articles .related-articles-card {
   border: var(--border-heritage);
   border-radius: var(--border-radius-heritage);
   overflow: clip;
-  background: light-dark(var(--color-parchment), var(--color-gray-900));
+  background: light-dark(var(--color-parchment), var(--color-card-dark));
   transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -78,7 +78,7 @@ main .related-articles .related-articles-card-description {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: light-dark(var(--color-ink), var(--color-gray-300));
+  color: light-dark(var(--color-ink), var(--color-muted));
   opacity: 0.8;
 }
 
