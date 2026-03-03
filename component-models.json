@@ -277,11 +277,15 @@
     "id": "fragment",
     "fields": [
       {
-        "component": "richtext",
+        "component": "text",
+        "name": "urlText",
+        "label": "Fragment URL Text"
+      },
+      {
+        "component": "text",
         "name": "url",
-        "label": "Fragment Path",
-        "required": true,
-        "description": "Path to the fragment"
+        "label": "Fragment URL",
+        "required": true
       }
     ]
   },
