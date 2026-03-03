@@ -259,3 +259,11 @@ export function createChart(canvas, config) {
   canvas.chart = chart;
   return chart;
 }
+
+/**
+ * Check if the current page is in the Universal Editor.
+ * @returns {boolean}
+ */
+export function isUE() {
+  return window.location.hostname.includes('ue.da') || window.location.host.includes('localhost:4712');
+}

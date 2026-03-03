@@ -1,4 +1,5 @@
 import { toCamelCase, toClassName, buildBlock, decorateBlock, loadBlock } from '../../scripts/aem.js';
+import { isUE } from '../../scripts/shared.js';
 
 /**
  * Creates an HTML element with an optional class name
@@ -730,6 +731,7 @@ function buildForm(fields, submit) {
  * @param {HTMLElement} block - Form block element
  */
 export default function decorate(block) {
+  if (isUE()) return;
   block.style.visibility = 'hidden';
   const [source, submit] = [...block.querySelectorAll('a[href]')].map((a) => a.href);
   if (source) {
