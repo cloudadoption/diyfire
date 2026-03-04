@@ -150,7 +150,7 @@
   --link-hover-color: var(--color-link-hover);
 
   /* heritage border */
-  --border-heritage: 1px solid light-dark(rgb(161 79 43 / 15%), rgb(245 242 237 / 10%));
+  --border-heritage: 2px solid light-dark(rgb(161 79 43 / 20%), rgb(245 242 237 / 20%));
   --border-radius-heritage: 24px;
 }
 
