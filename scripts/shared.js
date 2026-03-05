@@ -259,3 +259,21 @@ export function createChart(canvas, config) {
   canvas.chart = chart;
   return chart;
 }
+
+/**
+ * Resolve DOM context for a block element.
+ * Returns the correct body and event root whether the block runs
+ * in the normal document or inside a shadow DOM (aem-embed).
+ * @param {Element} block
+ * @returns {{ root: Document|ShadowRoot, body: HTMLElement, eventRoot: Document|ShadowRoot, isEmbed: boolean }}
+ */
+export function getBlockContext(block) {
+  const root = block.getRootNode();
+  const isEmbed = root !== document;
+  return {
+    root,
+    body: isEmbed ? root.querySelector('body') : document.body,
+    eventRoot: isEmbed ? root : document,
+    isEmbed,
+  };
+}

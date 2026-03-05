@@ -19,14 +19,14 @@ footer .footer p {
 }
 
 /* Row 1: Disclaimer */
-footer .footer > div > div:first-child {
+footer .footer .section:first-child {
   padding-bottom: var(--space-m);
   font-size: var(--body-font-size-s);
   font-weight: 400;
 }
 
 /* Row 2: Tagline */
-footer .footer > div > div:nth-child(2) p {
+footer .footer .section:nth-child(2) p {
   font-family: var(--font-family-serif);
   font-weight: 400;
   font-size: var(--body-font-size-s);
@@ -35,13 +35,13 @@ footer .footer > div > div:nth-child(2) p {
 }
 
 /* Row 3: Copyright + social icons (merged) */
-footer .footer > div > div:nth-child(3) {
+footer .footer .section:nth-child(3) {
   margin-top: var(--space-m);
   border-top: 1px solid rgb(255 255 255 / 15%);
   padding-top: var(--space-m);
 }
 
-footer .footer > div > div:nth-child(3) .default-content-wrapper {
+footer .footer .section:nth-child(3) .default-content-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +54,7 @@ footer .footer .footer-separator {
   margin-inline: var(--space-xs);
 }
 
-footer .footer > div > div:nth-child(3) ul {
+footer .footer .section:nth-child(3) ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -63,7 +63,7 @@ footer .footer > div > div:nth-child(3) ul {
   gap: var(--space-s);
 }
 
-footer .footer > div > div:nth-child(3) li {
+footer .footer .section:nth-child(3) li {
   margin: 0;
 }
 
@@ -71,13 +71,13 @@ footer .footer a:any-link {
   color: var(--color-parchment);
 }
 
-footer .footer > div > div:nth-child(3) ul a {
+footer .footer .section:nth-child(3) ul a {
   text-decoration: none;
   color: inherit;
   opacity: 0.7;
 }
 
-footer .footer > div > div:nth-child(3) ul a:hover {
+footer .footer .section:nth-child(3) ul a:hover {
   opacity: 1;
 }
 

@@ -18,16 +18,12 @@ import dynamicBlocks from '../blocks/dynamic/index.js';
 
 const THEME_STORAGE_KEY = 'diyfire-theme';
 
-function applyStoredThemePreference() {
-  try {
-    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    if (storedTheme !== 'light' && storedTheme !== 'dark') return;
-    document.documentElement.dataset.theme = storedTheme;
-    document.body.classList.remove('light-scheme', 'dark-scheme');
-    document.body.classList.add(`${storedTheme}-scheme`);
-  } catch (e) {
-    // do nothing
-  }
+function applyTheme(theme) {
+  const t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
+  if (t !== 'light' && t !== 'dark') return;
+  document.documentElement.dataset.theme = t;
+  document.body.classList.remove('light-scheme', 'dark-scheme');
+  document.body.classList.add(`${t}-scheme`);
 }
 
 const isYoutubeLink = (url) => ['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname);
@@ -170,7 +166,7 @@ async function loadTemplate(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
-  applyStoredThemePreference();
+  applyTheme();
   const main = doc.querySelector('main');
   if (main) {
     if (window.isErrorPage) loadErrorPage(main);
@@ -252,15 +248,30 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
+/**
+ * Called by aem-embed after decorateMain + block loading.
+ * Runs project-specific post-decoration logic that would
+ * normally happen in loadLazy (e.g. dynamic blocks).
+ */
+export async function decorateEmbed(main) {
+  await dynamicBlocks(main);
+}
+
 export async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
 }
 
-loadPage();
+if (!window.hlx?.suppressLoadPage) {
+  loadPage();
 
-(async function loadDa() {
-  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
-  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
-}());
+  (async function loadDa() {
+    if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+    import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+  }());
+
+  window.addEventListener('aem-theme-change', (e) => {
+    applyTheme(e.detail?.theme);
+  });
+}
