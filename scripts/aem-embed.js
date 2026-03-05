@@ -149,7 +149,7 @@ export class AEMEmbed extends HTMLElement {
   }
 
   async handleMain(htmlText, body, origin) {
-    await this.pseudoDecorateMain(htmlText, body, origin)
+    await this.pseudoDecorateMain(htmlText, body, origin);
     body.classList.add('appear');
   }
 
@@ -191,7 +191,7 @@ export class AEMEmbed extends HTMLElement {
 
         let htmlText = await resp.text();
         // Fix relative image urls
-        const regex = /.\/media/g;
+        const regex = /\.\/media/g;
         htmlText = htmlText.replace(regex, `${origin}/media`);
 
         // Set initialized to true so we don't run through this again
