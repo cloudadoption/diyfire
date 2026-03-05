@@ -86,9 +86,7 @@ export class AEMEmbed extends HTMLElement {
     footer.append(block);
 
     const cell = block.firstElementChild.firstElementChild;
-    const nav = document.createElement('nav');
-    cell.append(nav);
-    while (main.firstElementChild) nav.append(main.firstElementChild);
+    while (main.firstElementChild) cell.append(main.firstElementChild);
     main.remove();
 
     await this.loadBlock(body, block, 'footer', origin);

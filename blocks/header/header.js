@@ -358,16 +358,26 @@ function toggleMobile(nav, open) {
 const NAV_ITEMS = '.default-content-wrapper > ul > li';
 
 export default async function decorate(block) {
-  const fragment = await loadFragment(getNavPath());
-  if (!fragment) return;
+  // Load nav content (skip if aem-embed already provided content)
+  if (block.textContent === '') {
+    const fragment = await loadFragment(getNavPath());
+    if (!fragment) return;
 
-  block.textContent = '';
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
-  nav.setAttribute('aria-label', 'Main');
-  nav.setAttribute('aria-expanded', 'false');
+    block.textContent = '';
+    const nav = document.createElement('nav');
+    nav.id = 'nav';
+    nav.setAttribute('aria-label', 'Main');
+    nav.setAttribute('aria-expanded', 'false');
 
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+    block.append(nav);
+  }
+
+  const nav = block.querySelector('nav');
+  if (!nav) return;
+  if (!nav.id) nav.id = 'nav';
+  if (!nav.getAttribute('aria-label')) nav.setAttribute('aria-label', 'Main');
+  if (!nav.getAttribute('aria-expanded')) nav.setAttribute('aria-expanded', 'false');
 
   ['brand', 'sections', 'tools'].forEach((c, i) => nav.children[i]?.classList.add(`nav-${c}`));
 
