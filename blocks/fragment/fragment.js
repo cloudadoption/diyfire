@@ -49,7 +49,7 @@ export default async function decorate(block) {
   const fragment = await loadFragment(path);
   if (fragment) {
     block.replaceChildren(...fragment.childNodes);
-    const main = document.querySelector('main');
+    const main = block.closest('main');
     if (main) await dynamicBlocks(main);
   }
 }
