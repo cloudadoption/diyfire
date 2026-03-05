@@ -6,7 +6,7 @@ import {
   useEffect,
 } from 'https://esm.sh/htm/preact/standalone';
 
-const BASE_URL = window.location.origin;
+const BASE_URL = 'https://main--diyfire--cloudadoption.aem.live';
 
 function Card({ title, children }) {
   return html`
