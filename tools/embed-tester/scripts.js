@@ -8,6 +8,18 @@ import {
 
 const LIVE_URL = 'https://main--diyfire--cloudadoption.aem.live';
 
+// Sync theme changes from header toggle to all embeds on this page
+window.addEventListener('aem-theme-change', (e) => {
+  const { theme } = e.detail;
+  document.querySelectorAll('aem-embed').forEach((embed) => {
+    const body = embed.shadowRoot?.querySelector('body');
+    if (body) {
+      body.classList.remove('light-scheme', 'dark-scheme');
+      body.classList.add(`${theme}-scheme`);
+    }
+  });
+});
+
 function getBaseUrl() {
   const { origin } = window.location;
   if (origin.includes('localhost')) return origin;

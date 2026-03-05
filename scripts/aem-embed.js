@@ -71,7 +71,6 @@ export class AEMEmbed extends HTMLElement {
 
     block.dataset.blockStatus = 'loaded';
 
-    body.style.height = 'var(--nav-height)';
     body.classList.add('appear');
   }
 
