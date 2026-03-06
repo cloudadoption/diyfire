@@ -19,8 +19,10 @@ import dynamicBlocks from '../blocks/dynamic/index.js';
 const THEME_STORAGE_KEY = 'diyfire-theme';
 
 function applyTheme(theme) {
-  const t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
-  if (t !== 'light' && t !== 'dark') return;
+  let t = theme ?? (() => { try { return localStorage.getItem(THEME_STORAGE_KEY); } catch (e) { return null; } })();
+  if (t !== 'light' && t !== 'dark') {
+    t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
   document.documentElement.dataset.theme = t;
   document.body.classList.remove('light-scheme', 'dark-scheme');
   document.body.classList.add(`${t}-scheme`);
