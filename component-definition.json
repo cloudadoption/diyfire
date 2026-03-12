@@ -216,15 +216,15 @@
               "fields": [
                 {
                   "name": "image",
-                  "selector": "div:nth-child(1)>div>p>picture>img[src]"
+                  "selector": "div:nth-child(1)>div>picture>img[src]"
                 },
                 {
                   "name": "imageAlt",
-                  "selector": "div:nth-child(1)>div>p>picture>img[alt]"
+                  "selector": "div:nth-child(1)>div>picture>img[alt]"
                 },
                 {
                   "name": "heading",
-                  "selector": "div:nth-child(2)>div>p>h1"
+                  "selector": "div:nth-child(2)>div>h1"
                 }
               ]
             }
