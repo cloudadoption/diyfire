@@ -10,8 +10,8 @@
           "rows": 2,
           "columns": 1,
           "fields": [
-            { "name": "source", "selector": "div:nth-child(1)>div>p" },
-            { "name": "actionUrl", "selector": "div:nth-child(2)>div>p" }
+            { "name": "source", "selector": "div:nth-child(1)>div>a[href]" },
+            { "name": "actionUrl", "selector": "div:nth-child(2)>div>a[href]" }
           ]
         }
       }
@@ -22,15 +22,16 @@
       "id": "form",
       "fields": [
         {
-          "component": "richtext",
+          "component": "reference",
           "name": "source",
           "label": "Form Source URL",
           "valueType": "string",
+          "multi": false,
           "required": true,
           "description": "URL to the JSON form definition"
         },
         {
-          "component": "richtext",
+          "component": "text",
           "name": "actionUrl",
           "label": "Submit Endpoint",
           "valueType": "string",

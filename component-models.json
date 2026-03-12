@@ -257,15 +257,16 @@
     "id": "form",
     "fields": [
       {
-        "component": "richtext",
+        "component": "reference",
         "name": "source",
         "label": "Form Source URL",
         "valueType": "string",
+        "multi": false,
         "required": true,
         "description": "URL to the JSON form definition"
       },
       {
-        "component": "richtext",
+        "component": "text",
         "name": "actionUrl",
         "label": "Submit Endpoint",
         "valueType": "string",
