@@ -7,6 +7,12 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 import { getBlockContext } from '../../scripts/shared.js';
+import {
+  getLoginUrl,
+  getLogoutUrl,
+  getDefaultAuthLabel,
+  getSessionState,
+} from '../../scripts/shared/auth-api.js';
 
 const DESKTOP = window.matchMedia('(min-width: 900px)');
 const THEME_KEY = 'diyfire-theme';
@@ -231,6 +237,99 @@ function getCookie(name) {
   return decodeURIComponent(cookie.split('=').slice(1).join('='));
 }
 
+function hasCookieStartingWith(prefix) {
+  return document.cookie
+    .split(';')
+    .map((entry) => decodeURIComponent(entry.split('=')[0] || '').trim())
+    .some((cookieName) => cookieName.startsWith(prefix));
+}
+
+function isLoggedIn() {
+  return hasCookieStartingWith('CF_Authorization');
+}
+
+async function resolveAuthState() {
+  try {
+    const session = await getSessionState();
+    return {
+      authenticated: Boolean(session?.authenticated),
+      email: session?.email || '',
+    };
+  } catch (e) {
+    return {
+      authenticated: isLoggedIn(),
+      email: '',
+    };
+  }
+}
+
+function setAuthUserInfo(link, email) {
+  link.querySelector('.nav-auth-info')?.remove();
+  link.removeAttribute('title');
+  link.removeAttribute('data-auth-email');
+
+  if (!email) return;
+
+  link.dataset.authEmail = email;
+  link.setAttribute('title', email);
+  const info = document.createElement('span');
+  info.className = 'nav-auth-info';
+  info.setAttribute('aria-hidden', 'true');
+  info.setAttribute('title', email);
+  info.textContent = 'i';
+  link.append(info);
+}
+
+async function initAuth(nav, tools) {
+  const loginLabel = getDefaultAuthLabel('login');
+  const logoutLabel = getDefaultAuthLabel('logout');
+
+  const loginCandidate = tools.querySelector('a[href*="login" i], a[data-auth-link]');
+  const shouldCreateLink = !loginCandidate;
+
+  const desktopLink = loginCandidate || document.createElement('a');
+  if (shouldCreateLink) {
+    desktopLink.href = getLoginUrl();
+    desktopLink.className = 'button nav-auth-link nav-auth-desktop';
+    tools.append(desktopLink);
+  }
+
+  desktopLink.dataset.authLink = 'true';
+  if (!desktopLink.classList.contains('button')) desktopLink.classList.add('button');
+  desktopLink.classList.add('nav-auth-link', 'nav-auth-desktop');
+
+  let mobileLink = nav.querySelector('.nav-auth-mobile-item a');
+  if (!mobileLink) {
+    const mobileList = nav.querySelector('.nav-sections .default-content-wrapper > ul');
+    if (mobileList) {
+      const li = document.createElement('li');
+      li.className = 'nav-auth-mobile-item';
+      const p = document.createElement('p');
+      mobileLink = document.createElement('a');
+      mobileLink.className = 'button nav-auth-link nav-auth-mobile';
+      mobileLink.dataset.authLink = 'true';
+      p.append(mobileLink);
+      li.append(p);
+      mobileList.append(li);
+    }
+  }
+  if (mobileLink && !mobileLink.classList.contains('button')) mobileLink.classList.add('button');
+
+  const authState = await resolveAuthState();
+  const loggedIn = authState.authenticated;
+  const loginHref = getLoginUrl();
+  const logoutHref = getLogoutUrl();
+  const targetHref = loggedIn ? logoutHref : loginHref;
+  const label = loggedIn ? logoutLabel : loginLabel;
+
+  [desktopLink, mobileLink].filter(Boolean).forEach((link) => {
+    link.setAttribute('href', targetHref);
+    link.textContent = label;
+    link.setAttribute('aria-label', label);
+    setAuthUserInfo(link, loggedIn ? authState.email : '');
+  });
+}
+
 function ensureGoogleTranslateScript() {
   if (window.__googleTranslateScriptLoaded) return Promise.resolve();
   if (window.__googleTranslateScriptPromise) return window.__googleTranslateScriptPromise;
@@ -437,6 +536,7 @@ export default async function decorate(block) {
   if (tools) {
     initTheme(tools);
     initSearch(tools);
+    await initAuth(nav, tools);
     initLanguage(tools, eventRoot);
     hydrateTranslateFromCookie();
   }
