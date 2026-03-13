@@ -12,9 +12,30 @@ import {
   loadSection,
   sampleRUM,
   loadCSS,
+  loadScript,
   getMetadata,
+  toCamelCase,
+  toClassName,
 } from './aem.js';
+import { getAllMetadata } from './shared.js';
 import dynamicBlocks from '../blocks/dynamic/index.js';
+
+const AUDIENCES = {
+  mobile: () => window.innerWidth < 600,
+  desktop: () => window.innerWidth >= 600,
+};
+
+function getExperimentationContext() {
+  return {
+    getAllMetadata, getMetadata, loadCSS, loadScript, sampleRUM, toCamelCase, toClassName,
+  };
+}
+
+function isExperimentationEnabled() {
+  return getMetadata('experiment')
+    || Object.keys(getAllMetadata('campaign')).length
+    || Object.keys(getAllMetadata('audience')).length;
+}
 
 const THEME_STORAGE_KEY = 'diyfire-theme';
 
@@ -172,6 +193,10 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     if (window.isErrorPage) loadErrorPage(main);
+    if (isExperimentationEnabled()) {
+      const { loadEager: runEager } = await import('../plugins/experimentation/src/index.js');
+      await runEager(document, { audiences: AUDIENCES }, getExperimentationContext());
+    }
     decorateMain(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), async (s) => {
@@ -229,6 +254,11 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
+  if (isExperimentationEnabled()) {
+    const { loadLazy: runLazy } = await import('../plugins/experimentation/src/index.js');
+    await runLazy(document, { audiences: AUDIENCES }, getExperimentationContext());
+  }
+
   const loadQuickEdit = async (...args) => {
     const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
     initQuickEdit(...args);
@@ -279,9 +309,22 @@ if (!window.hlx?.suppressLoadPage) {
   loadPage();
 
   (async function loadDa() {
-    if (!new URL(window.location.href).searchParams.get('dapreview')) return;
-    import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+    const { searchParams } = new URL(window.location.href);
+    if (searchParams.get('dapreview')) {
+      import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+    }
+    if (searchParams.get('daexperiment')) {
+      import('https://da.live/nx/public/plugins/exp/exp.js');
+    }
   }());
+
+  if (document.querySelector('aem-sidekick')) {
+    import('./sidekick.js');
+  } else {
+    document.addEventListener('sidekick-ready', () => {
+      import('./sidekick.js');
+    }, { once: true });
+  }
 
   window.addEventListener('aem-theme-change', (e) => {
     applyTheme(e.detail?.theme);
