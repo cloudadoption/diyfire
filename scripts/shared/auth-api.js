@@ -1,6 +1,7 @@
 const AUTH_ORIGIN = 'https://demo-bbird-auth.aem-poc-lab.workers.dev';
 const AUTH_PATHS = {
   login: '/auth/login',
+  logout: '/auth/logout',
   session: '/auth/session',
 };
 
@@ -24,7 +25,7 @@ export function getLoginUrl(returnTo = window.location.href) {
 }
 
 export function getLogoutUrl() {
-  return authUrl('/auth/logout');
+  return authUrl(AUTH_PATHS.logout);
 }
 
 export async function getSessionState() {
