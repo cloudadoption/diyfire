@@ -13,6 +13,9 @@
     "build:json:definitions": "merge-json-cli -i \"ue/models/component-definition.json\" -o \"component-definition.json\"",
     "build:json:filters": "merge-json-cli -i \"ue/models/component-filters.json\" -o \"component-filters.json\"",
     "prepare": "husky",
+    "dev:auth": "wrangler dev --config ./workers/auth/wrangler.toml",
+    "deploy:auth": "wrangler deploy --config ./workers/auth/wrangler.toml",
+    "tail:auth": "wrangler tail --config ./workers/auth/wrangler.toml",
     "dev:contact-us": "wrangler dev --config ./workers/contact_us/wrangler.toml",
     "deploy:contact-us": "wrangler deploy --config ./workers/contact_us/wrangler.toml",
     "tail:contact-us": "wrangler tail --config ./workers/contact_us/wrangler.toml"
