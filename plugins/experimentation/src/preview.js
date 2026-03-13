@@ -53,7 +53,7 @@ function createButton(label) {
   const button = document.createElement('button');
   button.className = 'hlx-badge';
   const text = document.createElement('span');
-  text.textContent = label;
+  text.innerHTML = label;
   button.append(text);
   return button;
 }
@@ -64,7 +64,7 @@ function createPopupItem(item) {
 
   const label = document.createElement('h5');
   label.className = 'hlx-popup-item-label';
-  label.textContent = typeof item === 'object' ? item.label : item;
+  label.innerHTML = typeof item === 'object' ? item.label : item;
   div.appendChild(label);
 
   if (item.description) {
@@ -89,16 +89,16 @@ function createPopupItem(item) {
       
       const link = document.createElement('a');
       link.href = action.href || '#';
-      link.textContent = action.label;
-      
+      link.innerHTML = action.label;
+
       if (action.onclick) {
         link.addEventListener('click', action.onclick);
       }
-      
+
       buttonDiv.appendChild(link);
       actionsDiv.appendChild(buttonDiv);
     });
-    
+
     div.appendChild(actionsDiv);
   }
 
@@ -120,7 +120,7 @@ function createPopupDialog(header, items = []) {
   
   const headerLabel = document.createElement('h5');
   headerLabel.className = 'hlx-popup-header-label';
-  headerLabel.textContent = typeof header === 'object' ? header.label : header;
+  headerLabel.innerHTML = typeof header === 'object' ? header.label : header;
   headerDiv.appendChild(headerLabel);
   
   if (header.description) {
@@ -144,12 +144,12 @@ function createPopupDialog(header, items = []) {
       
       const link = document.createElement('a');
       link.href = action.href || '#';
-      link.textContent = action.label;
-      
+      link.innerHTML = action.label;
+
       if (action.onclick) {
         link.addEventListener('click', action.onclick);
       }
-      
+
       buttonDiv.appendChild(link);
       headerActions.appendChild(buttonDiv);
     });
@@ -197,7 +197,7 @@ function createToggleButton(label) {
   button.setAttribute('aria-pressed', false);
   button.setAttribute('tabindex', 0);
   const text = document.createElement('span');
-  text.textContent = label;
+  text.innerHTML = label;
   button.append(text);
   button.addEventListener('click', () => {
     button.setAttribute('aria-pressed', button.getAttribute('aria-pressed') === 'false');
