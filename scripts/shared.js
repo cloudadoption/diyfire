@@ -261,6 +261,25 @@ export function createChart(canvas, config) {
 }
 
 /**
+ * Returns all metadata properties matching a given scope/prefix.
+ * Looks for `<meta property="{scope}:…">` and `<meta name="{scope}-…">`.
+ * @param {string} scope The metadata prefix (e.g. 'campaign', 'audience')
+ * @param {Document} [doc=document] Document to query
+ * @returns {Record<string, string>} Key-value pairs of matching metadata (keys in camelCase)
+ */
+export function getAllMetadata(scope, doc = document) {
+  const result = {};
+  const meta = [...doc.head.querySelectorAll(`meta[property^="${scope}:"], meta[name^="${scope}-"]`)];
+  meta.forEach((m) => {
+    const key = m.getAttribute('property')
+      ? m.getAttribute('property').replace(`${scope}:`, '')
+      : m.getAttribute('name').replace(`${scope}-`, '');
+    result[key.replace(/[-:]([a-z])/g, (g) => g[1].toUpperCase())] = m.content;
+  });
+  return result;
+}
+
+/**
  * Check if the current page is in the Universal Editor.
  * @returns {boolean}
  */
