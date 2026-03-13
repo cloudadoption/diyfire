@@ -5,6 +5,7 @@ import {
   getAuthoredLinks,
   normalizePath,
   resolveArticlesFromIndex,
+  isUE,
 } from '../../scripts/shared.js';
 
 function buildLinksCard(article) {
@@ -132,15 +133,28 @@ function decorateDefault(block) {
 
     const linkEl = li.querySelector('.cards-card-image a[href]') || li.querySelector('.cards-card-body a[href]');
     if (linkEl) {
-      const wrapper = createTag('a', {
-        href: linkEl.getAttribute('href'),
-        title: linkEl.getAttribute('title')?.trim() || undefined,
-        class: 'cards-card-link',
-      });
-      while (li.firstChild) wrapper.append(li.firstChild);
-      li.append(wrapper);
-      linkEl.replaceWith(...linkEl.childNodes);
-      li.querySelectorAll('.cards-card-body a[href]').forEach((a) => a.replaceWith(...a.childNodes));
+      if (isUE) {
+        // In UE: use a <div> wrapper so the authored <a> (with its href) is preserved
+        const wrapper = createTag('div', { class: 'cards-card-link' });
+        while (li.firstChild) wrapper.append(li.firstChild);
+        li.append(wrapper);
+        //Remove the button class from the link and button-container class from the parent
+        const parent = linkEl.parentElement;
+        if (parent) {
+          parent.classList.remove('button-container');
+        }
+        linkEl.classList.remove('button');
+       } else {
+        const wrapper = createTag('a', {
+          href: linkEl.getAttribute('href'),
+          title: linkEl.getAttribute('title')?.trim() || undefined,
+          class: 'cards-card-link',
+        });
+        while (li.firstChild) wrapper.append(li.firstChild);
+        li.append(wrapper);
+        linkEl.replaceWith(...linkEl.childNodes);
+        li.querySelectorAll('.cards-card-body a[href]').forEach((a) => a.replaceWith(...a.childNodes));
+      }
     }
 
     ul.append(li);
