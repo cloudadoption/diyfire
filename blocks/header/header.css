@@ -296,23 +296,41 @@ header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p > a {
 
 /* chevron: mobile only (p::after); desktop uses li::after below */
 @media (width <= 899px) {
-  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p::after {
-    content: '';
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p {
+    padding-right: calc(var(--nav-item-padding) + 26px);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p > .nav-submenu-toggle {
     position: absolute;
     right: var(--nav-item-padding);
     top: 50%;
-    transform: translateY(-50%) rotate(135deg);
+    width: 24px;
+    height: 24px;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p > .nav-submenu-toggle::before {
+    content: '';
+    display: block;
     width: 6px;
     height: 6px;
+    margin: auto;
     border: 2px solid currentcolor;
     border-radius: 0 1px 0 0;
     border-width: 2px 2px 0 0;
     opacity: 0.6;
+    transform: rotate(135deg);
     transition: transform 0.2s ease;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop[aria-expanded='true'] > p::after {
-    transform: translateY(-50%) rotate(-45deg);
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop[aria-expanded='true'] > p > .nav-submenu-toggle::before {
+    transform: rotate(-45deg);
   }
 }
 
@@ -805,6 +823,10 @@ header nav .nav-tools .nav-language-menu a:focus-visible {
 
 /* desktop: 900px */
 @media (width >= 900px) {
+  header nav .nav-sections .default-content-wrapper > ul > li.nav-drop > p > .nav-submenu-toggle {
+    display: none;
+  }
+
   header nav {
     display: flex;
     justify-content: space-between;

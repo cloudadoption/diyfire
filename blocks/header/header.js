@@ -99,12 +99,48 @@ function decorateMega(li) {
 }
 
 function setupDropdown(li) {
+  const submenu = li.querySelector(':scope > ul');
+  const heading = li.querySelector(':scope > p');
+  const parentLink = li.querySelector(':scope > p > a');
+  let toggleBtn = null;
+
+  const syncToggle = () => {
+    if (!toggleBtn) return;
+    const expanded = li.getAttribute('aria-expanded') === 'true';
+    toggleBtn.setAttribute('aria-expanded', String(expanded));
+    toggleBtn.setAttribute('aria-label', expanded ? 'Collapse submenu' : 'Expand submenu');
+  };
+
+  if (submenu && heading) {
+    toggleBtn = heading.querySelector('.nav-submenu-toggle');
+    if (!toggleBtn) {
+      toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'nav-submenu-toggle';
+      heading.append(toggleBtn);
+    }
+    syncToggle();
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (DESKTOP.matches) return;
+      const wasOpen = li.getAttribute('aria-expanded') === 'true';
+      collapseAll(li.closest('nav'));
+      li.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+      syncToggle();
+    });
+  }
+
   const open = () => {
     li.megaSync?.();
     collapseAll(li.closest('nav'));
     li.setAttribute('aria-expanded', 'true');
+    syncToggle();
   };
-  const close = () => li.setAttribute('aria-expanded', 'false');
+  const close = () => {
+    li.setAttribute('aria-expanded', 'false');
+    syncToggle();
+  };
 
   li.addEventListener('mouseenter', () => { if (DESKTOP.matches) open(); });
   li.addEventListener('mouseleave', (e) => {
@@ -117,9 +153,14 @@ function setupDropdown(li) {
 
   li.addEventListener('click', (e) => {
     if (!DESKTOP.matches) {
-      const submenu = li.querySelector(':scope > ul');
       const clickedSubmenuLink = submenu?.contains(e.target) && e.target.closest('a');
+      const clickedToggle = e.target.closest('.nav-submenu-toggle');
+      const clickedParentLink = parentLink && (e.target === parentLink || parentLink.contains(e.target));
+      if (clickedToggle) return;
       if (clickedSubmenuLink) {
+        collapseAll(li.closest('nav'));
+        close();
+      } else if (clickedParentLink) {
         collapseAll(li.closest('nav'));
         close();
       } else if (submenu) {
@@ -127,6 +168,7 @@ function setupDropdown(li) {
         const wasOpen = li.getAttribute('aria-expanded') === 'true';
         collapseAll(li.closest('nav'));
         li.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+        syncToggle();
       }
     } else if (li.querySelector('ul')?.contains(e.target) && e.target.closest('a')) {
       collapseAll(li.closest('nav'));
