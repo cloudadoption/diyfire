@@ -315,19 +315,24 @@ async function initAuth(nav, tools) {
   }
   if (mobileLink && !mobileLink.classList.contains('button')) mobileLink.classList.add('button');
 
-  const authState = await resolveAuthState();
-  const loggedIn = authState.authenticated;
-  const loginHref = getLoginUrl();
-  const logoutHref = getLogoutUrl();
-  const targetHref = loggedIn ? logoutHref : loginHref;
-  const label = loggedIn ? logoutLabel : loginLabel;
+  const applyAuthState = async () => {
+    const authState = await resolveAuthState();
+    const loggedIn = authState.authenticated;
+    const loginHref = getLoginUrl();
+    const logoutHref = getLogoutUrl();
+    const targetHref = loggedIn ? logoutHref : loginHref;
+    const label = loggedIn ? logoutLabel : loginLabel;
 
-  [desktopLink, mobileLink].filter(Boolean).forEach((link) => {
-    link.setAttribute('href', targetHref);
-    link.textContent = label;
-    link.setAttribute('aria-label', label);
-    setAuthUserInfo(link, loggedIn ? authState.email : '');
-  });
+    [desktopLink, mobileLink].filter(Boolean).forEach((link) => {
+      link.setAttribute('href', targetHref);
+      link.textContent = label;
+      link.setAttribute('aria-label', label);
+      setAuthUserInfo(link, loggedIn ? authState.email : '');
+    });
+  };
+
+  await applyAuthState();
+  return applyAuthState;
 }
 
 function ensureGoogleTranslateScript() {
@@ -454,6 +459,14 @@ function toggleMobile(nav, open, body) {
   nav.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('tabindex', DESKTOP.matches ? '0' : '-1'));
 }
 
+function syncMobileNavHeight(nav) {
+  if (DESKTOP.matches) {
+    nav.style.removeProperty('--nav-open-height');
+    return;
+  }
+  nav.style.setProperty('--nav-open-height', `${window.innerHeight}px`);
+}
+
 const NAV_ITEMS = '.default-content-wrapper > ul > li';
 
 export default async function decorate(block) {
@@ -507,7 +520,11 @@ export default async function decorate(block) {
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
   hamburger.innerHTML = '<button type="button" aria-controls="nav" aria-label="Open navigation"><span class="nav-hamburger-icon"></span></button>';
-  hamburger.onclick = () => toggleMobile(nav, undefined, body);
+  let refreshAuthState = null;
+  hamburger.onclick = async () => {
+    toggleMobile(nav, undefined, body);
+    if (nav.getAttribute('aria-expanded') === 'true') await refreshAuthState?.();
+  };
 
   eventRoot.addEventListener('click', (e) => {
     if (!DESKTOP.matches && nav.getAttribute('aria-expanded') === 'true' && !nav.contains(e.target)) {
@@ -530,13 +547,23 @@ export default async function decorate(block) {
   block.append(wrapper);
 
   toggleMobile(nav, false, body);
+  syncMobileNavHeight(nav);
   collapseAll(nav);
   DESKTOP.addEventListener('change', () => toggleMobile(nav, false, body));
+  window.addEventListener('resize', () => {
+    syncMobileNavHeight(nav);
+  });
 
   if (tools) {
     initTheme(tools);
     initSearch(tools);
-    await initAuth(nav, tools);
+    refreshAuthState = await initAuth(nav, tools);
+    window.addEventListener('pageshow', () => { refreshAuthState?.(); });
+    if (eventRoot === document) {
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) refreshAuthState?.();
+      });
+    }
     initLanguage(tools, eventRoot);
     hydrateTranslateFromCookie();
   }
