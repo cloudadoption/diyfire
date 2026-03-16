@@ -116,7 +116,7 @@ function showResult(success, siteName, errorMessage, codeConfig, queryIndexCopie
     }
 
     const siteUrl = `https://main--${siteName}--${ORG}.aem.page`;
-    const daUrl = `https://da.live/edit#/${ORG}/${siteName}/`;
+    const daUrl = `https://da.live/edit#/${ORG}/${siteName}`;
     const code = codeConfig || { owner: CODE_OWNER, repo: CODE_REPO };
     const githubUrl = code.source?.url || `https://github.com/${code.owner}/${code.repo}`;
 
@@ -327,7 +327,7 @@ async function createQueryIndex(token, newSiteName, yamlContent) {
 function getDefaultIndexHtml(siteName) {
   return `<body><header></header><main>
   <h1>Welcome to ${siteName}</h1>
-  <p>Your new site has been created. Edit this page in <a href="https://da.live/edit#/${ORG}/${siteName}/">Document Authoring</a>.</p>
+  <p>Your new site has been created. Edit this page in <a href="https://da.live/edit#/${ORG}/${siteName}">Document Authoring</a>.</p>
 </main><footer></footer></body>`;
 }
 

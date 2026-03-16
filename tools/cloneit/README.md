@@ -14,6 +14,8 @@ CloneIt creates a new repoless site by:
 
 The new site shares the same codebase (diyfire) and uses `https://content.da.live/cloudadoption/{sitename}/` as its content source.
 
+**Edit in DA:** Open your site in Document Authoring at `https://da.live/edit#/cloudadoption/{sitename}`
+
 ## How to Use
 
 1. Open the app from the AEM Sidekick (CloneIt button) or navigate to `/tools/cloneit/cloneit.html`
