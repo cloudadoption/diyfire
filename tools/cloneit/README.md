@@ -18,6 +18,8 @@ The new site shares the same codebase (diyfire) and uses `https://content.da.liv
 
 ## How to Use
 
+**Note:** Please sign in to AEM Sidekick on the Base Demo site before you initiate the Clone process.
+
 1. Open the app from the AEM Sidekick (CloneIt button) or navigate to `/tools/cloneit/cloneit.html`
 2. **Authentication** – The app must be opened from a DA context (e.g. da.live) to obtain the bearer token for API calls
 3. Enter a **site name** (lowercase, numbers and hyphens only, max 50 chars, e.g. `my-new-site`). Reserved names like `admin`, `api`, `config` are blocked.
