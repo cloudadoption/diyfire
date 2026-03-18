@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CloneIt</title>
+    <title>Clone-It</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="description" content="Clone the diyfire demo site to create a new repoless site with DA content">
     <base href="/tools/">
@@ -24,11 +24,17 @@
               <p class="subtitle">Clone demo site → new repoless AEM site</p>
             </div>
           </div>
-          <button class="help-btn" type="button" aria-label="Help" id="help-btn">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-          </button>
+          <div class="header-actions">
+            <nav class="tool-switcher" aria-label="Tool navigation">
+              <a id="clone-tool-link" class="tool-link is-active" href="/tools/cloneit/cloneit.html">Clone-It</a>
+              <a id="remix-tool-link" class="tool-link" href="/tools/remixit/remixit.html">Remix-It</a>
+            </nav>
+            <button class="help-btn" type="button" aria-label="Help" id="help-btn">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -154,7 +160,7 @@
         <div id="help-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 id="help-modal-title">CloneIt Help</h2>
+              <h2 id="help-modal-title">Clone-It Help</h2>
               <button class="modal-close" type="button" aria-label="Close">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -163,8 +169,8 @@
             </div>
             <div class="modal-body">
               <div class="help-section">
-                <h3>What does CloneIt do?</h3>
-                <p>CloneIt creates a new repoless AEM site by:</p>
+                <h3>What does Clone-It do?</h3>
+                <p>Clone-It creates a new repoless AEM site by:</p>
                 <ol>
                   <li><strong>Creating the AEM site config</strong> – Copies the diyfire demo site configuration and points it to a new content source</li>
                   <li><strong>Creating the DA content repo</strong> – Creates a new folder in Document Authoring (DA) for your site's content</li>

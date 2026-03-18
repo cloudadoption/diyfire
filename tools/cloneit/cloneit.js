@@ -27,6 +27,45 @@ const app = {
 const SITE_NAME_MAX_LENGTH = 50;
 const RESERVED_NAMES = ['admin', 'api', 'config', 'main', 'live', 'preview', 'status', 'job'];
 
+function getQueryParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name) || '';
+}
+
+function updatePageQuery(siteName) {
+  const url = new URL(window.location.href);
+  if (siteName) {
+    url.searchParams.set('site', siteName);
+  } else {
+    url.searchParams.delete('site');
+  }
+  window.history.replaceState({}, '', url);
+}
+
+function renderToolNavigation(siteName) {
+  const cloneLink = document.getElementById('clone-tool-link');
+  const remixLink = document.getElementById('remix-tool-link');
+  const params = new URLSearchParams();
+  const catalystBaseUrl = getQueryParam('catalyst');
+
+  if (siteName) {
+    params.set('site', siteName);
+  }
+  if (catalystBaseUrl) {
+    params.set('catalyst', catalystBaseUrl);
+  }
+
+  const query = params.toString() ? `?${params.toString()}` : '';
+  if (cloneLink) {
+    cloneLink.href = `/tools/cloneit/cloneit.html${query}`;
+  }
+  if (remixLink) {
+    remixLink.href = `/tools/remixit/remixit.html${query}`;
+  }
+
+  updatePageQuery(siteName);
+}
+
 function showToast(message, type = 'info') {
   const toast = document.getElementById('toast');
   const messageEl = toast?.querySelector('.toast-message');
@@ -37,6 +76,26 @@ function showToast(message, type = 'info') {
   setTimeout(() => {
     toast.classList.add('hidden');
   }, 5000);
+}
+
+function hydrateHeaderState() {
+  const siteInput = document.getElementById('site-name-input');
+  const cloneBtn = document.getElementById('clone-btn');
+  const previewEl = document.getElementById('site-preview');
+  const initialSiteName = validateSiteName(getQueryParam('site')).value || '';
+
+  if (siteInput) {
+    siteInput.value = initialSiteName;
+    siteInput.focus();
+  }
+  if (previewEl) {
+    previewEl.textContent = initialSiteName || 'yoursite';
+  }
+  if (cloneBtn) {
+    cloneBtn.disabled = !initialSiteName;
+  }
+
+  renderToolNavigation(initialSiteName);
 }
 
 function validateSiteName(name) {
@@ -603,6 +662,7 @@ function setupEventListeners() {
       const { value } = validateSiteName(siteInput.value);
       if (previewEl) previewEl.textContent = value || 'yoursite';
       if (cloneBtn) cloneBtn.disabled = !value;
+      renderToolNavigation(value || '');
     });
     siteInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -614,6 +674,10 @@ function setupEventListeners() {
 
   if (cloneBtn) {
     cloneBtn.addEventListener('click', () => {
+      if (!app.token) {
+        showToast('Open from DA for authentication before cloning.', 'error');
+        return;
+      }
       const { valid, value, error } = validateSiteName(siteInput?.value);
       if (!valid) {
         showToast(error, 'error');
@@ -664,18 +728,13 @@ function setupEventListeners() {
 }
 
 async function init() {
+  setupEventListeners();
+  hydrateHeaderState();
+
   try {
     const { token } = await DA_SDK;
     app.token = token;
-
-    setupEventListeners();
-
-    const siteInput = document.getElementById('site-name-input');
-    const cloneBtn = document.getElementById('clone-btn');
-    if (siteInput) siteInput.focus();
-    if (cloneBtn) cloneBtn.disabled = true;
-
-    showToast('CloneIt is ready. Enter a site name to clone the demo site.', 'success');
+    showToast('Clone-It is ready. Enter a site name to clone the demo site.', 'success');
   } catch (error) {
     console.error('Init failed:', error);
     showToast('Failed to initialize. Open from DA for authentication.', 'error');

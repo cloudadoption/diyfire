@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Remix-It</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="Generate industry remix briefs for repoless diyfire demo variants">
+    <base href="/tools/">
+    <link rel="stylesheet" href="/tools/remixit/remixit.css">
+    <script src="/tools/remixit/remixit.js" type="module"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="header-main">
+          <div class="app-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 7h16M4 12h10M4 17h7"/><path d="M17 15l3 3 4-5"/>
+            </svg>
+          </div>
+          <div class="header-copy">
+            <h1>Remix-It</h1>
+            <div class="subtitle-row">
+              <p class="subtitle">Generate the remix brief, then one-shot it into Catalyst.</p>
+              <button id="oak-unlock-btn" class="secret-seed" type="button" aria-label="Unlock hidden recipe" title="Seed"></button>
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <nav class="tool-switcher" aria-label="Tool navigation">
+            <a id="clone-tool-link" class="tool-link" href="/tools/cloneit/cloneit.html">Clone-It</a>
+            <a id="remix-tool-link" class="tool-link is-active" href="/tools/remixit/remixit.html">Remix-It</a>
+          </nav>
+          <button class="help-btn" type="button" aria-label="Help" id="help-btn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="card context-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Step 1</p>
+              <h2>Point Remix-It at the cloned site</h2>
+            </div>
+            <span class="status-pill">Clone-It -> Remix-It -> Catalyst</span>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span class="field-label">Site name</span>
+              <input id="site-name-input" class="input-field" type="text" placeholder="remixtest" autocomplete="off">
+              <span class="field-hint">Lowercase, numbers, hyphens only.</span>
+            </label>
+            <label class="field">
+              <span class="field-label">Target branch</span>
+              <input id="branch-name-input" class="input-field" type="text" placeholder="remixtest" autocomplete="off">
+              <span class="field-hint">Catalyst should create or switch to this branch before making code changes. Lowercase, numbers, hyphens only.</span>
+            </label>
+            <label class="field">
+              <span class="field-label">Catalyst target</span>
+              <input id="catalyst-url-input" class="input-field" type="url" placeholder="http://localhost:5173" autocomplete="off">
+              <span class="field-hint">Local default is <code>http://localhost:5173</code>. Direct one-shot launch expects a Catalyst build that supports the internal <code>window.name</code> ingress slice.</span>
+            </label>
+            <div class="derived-card">
+              <span class="field-label">Working model</span>
+              <p>This brief assumes a repoless clone where the content/site identity stays on the cloned site, the shared codebase stays in <code>diyfire</code>, and Catalyst must create or switch to a dedicated branch before it starts the redesign.</p>
+            </div>
+          </div>
+
+          <div class="link-grid">
+            <a id="preview-link" class="context-link" href="#" target="_blank" rel="noopener noreferrer">
+              <span class="context-label">Preview</span>
+              <span id="preview-url" class="context-url">https://main--remixtest--cloudadoption.aem.page/</span>
+            </a>
+            <a id="branch-preview-link" class="context-link" href="#" target="_blank" rel="noopener noreferrer">
+              <span class="context-label">Branch preview</span>
+              <span id="branch-preview-url" class="context-url">https://remixtest--remixtest--cloudadoption.aem.page/</span>
+            </a>
+            <a id="da-link" class="context-link" href="#" target="_blank" rel="noopener noreferrer">
+              <span class="context-label">DA content</span>
+              <span id="da-url" class="context-url">https://da.live/#/cloudadoption/remixtest</span>
+            </a>
+            <a class="context-link" href="https://da.live/apps/bulk" target="_blank" rel="noopener noreferrer">
+              <span class="context-label">Bulk app</span>
+              <span class="context-url">https://da.live/apps/bulk</span>
+            </a>
+            <a id="catalyst-link" class="context-link" href="#" target="_blank" rel="noopener noreferrer">
+              <span class="context-label">Catalyst target</span>
+              <span id="catalyst-url" class="context-url">http://localhost:5173</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Step 2</p>
+              <h2>Choose an industry recipe</h2>
+            </div>
+            <span id="recipe-badge" class="status-pill status-pill--muted">Pharma seed recipe</span>
+          </div>
+
+          <div id="recipe-grid" class="recipe-grid" aria-live="polite"></div>
+        </section>
+
+        <div class="workspace-grid">
+          <section class="card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Step 3</p>
+                <h2>Fill the brief</h2>
+              </div>
+            </div>
+
+            <form id="brief-form" class="stack-form">
+              <div class="field-grid">
+                <label class="field">
+                  <span class="field-label">Customer or account</span>
+                  <input id="account-input" class="input-field" type="text" placeholder="Contoso Therapeutics">
+                </label>
+                <label class="field">
+                  <span class="field-label">Audience</span>
+                  <input id="audience-input" class="input-field" type="text">
+                </label>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span class="field-label">Tone</span>
+                  <input id="tone-input" class="input-field" type="text">
+                </label>
+                <label class="field">
+                  <span class="field-label">CTA goals</span>
+                  <input id="cta-input" class="input-field" type="text">
+                </label>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span class="field-label">Page scope</span>
+                  <textarea id="scope-input" class="input-field input-area" rows="4"></textarea>
+                </label>
+                <label class="field">
+                  <span class="field-label">Proof points</span>
+                  <textarea id="proof-input" class="input-field input-area" rows="4"></textarea>
+                </label>
+              </div>
+
+              <div class="field-grid">
+                <label class="field">
+                  <span class="field-label">Visual direction</span>
+                  <textarea id="visual-input" class="input-field input-area" rows="4"></textarea>
+                </label>
+                <label class="field">
+                  <span class="field-label">Extra account context</span>
+                  <textarea id="context-input" class="input-field input-area" rows="4" placeholder="Mention products, regions, campaign focus, or messaging constraints."></textarea>
+                </label>
+              </div>
+
+              <label class="field">
+                <span class="field-label">Additional constraints</span>
+                <textarea id="constraints-input" class="input-field input-area" rows="3" placeholder="Optional. Example: avoid patient-facing promises, keep calculators unchanged, preserve legal language on compliance pages."></textarea>
+              </label>
+            </form>
+          </section>
+
+          <aside class="card strategy-card">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Guardrails</p>
+                <h2>What this recipe enforces</h2>
+              </div>
+            </div>
+            <p id="recipe-summary" class="strategy-copy"></p>
+            <div id="recipe-pills" class="pill-row"></div>
+            <ul id="guardrail-list" class="guardrail-list"></ul>
+            <div class="note-card">
+              <strong>Current hook into Catalyst</strong>
+              <p>Hosted <code>aemcoder.adobe.io</code> remains the manual consultant path today: copy the brief, connect the repo, and paste it. The direct one-shot path is for Catalyst builds that support the internal <code>window.name</code> launch transport.</p>
+            </div>
+          </aside>
+        </div>
+
+        <section class="card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Step 4</p>
+              <h2>Choose a launch track</h2>
+            </div>
+          </div>
+
+          <div class="launch-tracks">
+            <div class="launch-track">
+              <div class="track-heading">
+                <p class="eyebrow">Track A</p>
+                <h3>Hosted AEMCoder</h3>
+              </div>
+              <p class="track-copy">Copy the brief, open <code>aemcoder.adobe.io</code>, connect the cloned repo manually, then paste the Remix-It prompt into Catalyst.</p>
+              <div class="launch-actions launch-actions--manual">
+                <button id="copy-open-aemcoder-btn" class="btn btn-secondary" type="button">Copy prompt + open AEMCoder</button>
+                <button id="copy-prompt-btn" class="btn btn-secondary" type="button">Copy prompt only</button>
+              </div>
+            </div>
+            <div class="launch-track">
+              <div class="track-heading">
+                <p class="eyebrow">Track B</p>
+                <h3>Direct Catalyst</h3>
+              </div>
+              <p class="track-copy">Open the configured Catalyst target and pass the launch payload directly for an internal one-shot flow. This path avoids prompt-in-URL transport and expects the Catalyst build to support the <code>window.name</code> ingress slice.</p>
+              <div class="launch-actions launch-actions--direct">
+                <button id="launch-catalyst-btn" class="btn btn-primary" type="button">Launch one-shot in Catalyst</button>
+              </div>
+            </div>
+          </div>
+          <p class="launch-hint">Track B now uses a short Catalyst URL plus an internal <code>window.name</code> payload carrying <code>previewUrl</code>, <code>prompt</code>, <code>mode=execute</code>, and <code>autorun=1</code>. Clipboard fallback still runs for both tracks.</p>
+
+          <label class="field">
+            <span class="field-label">Generated brief</span>
+            <textarea id="prompt-output" class="prompt-output" rows="22" readonly></textarea>
+          </label>
+        </section>
+
+        <div id="help-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 id="help-modal-title">Remix-It Help</h2>
+              <button class="modal-close" type="button" aria-label="Close">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="help-section">
+                <h3>How to use it</h3>
+                <ol>
+                  <li>Create the repoless site in Clone-It.</li>
+                  <li>Open Remix-It with the new site name.</li>
+                  <li>Pick the closest industry recipe and adjust the brief.</li>
+                  <li>Choose either the hosted AEMCoder manual path or the direct Catalyst one-shot path.</li>
+                  <li>Review the result in preview, DA, and Bulk app.</li>
+                </ol>
+              </div>
+              <div class="help-section">
+                <h3>What it does now</h3>
+                <p>Remix-It supports two consultant workflows: a manual hosted AEMCoder path for today, and a direct one-shot path for Catalyst builds that support the internal <code>window.name</code> launch payload.</p>
+              </div>
+              <div class="help-section">
+                <h3>Default safety rule</h3>
+                <p>Recipes reuse the current block palette by default. Layout, theme, CSS, pacing, and composition are open to redesign; block or template additions remain an escalation path.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="toast-container">
+          <div class="toast hidden" id="toast">
+            <div class="toast-content">
+              <span class="toast-message"></span>
+              <button class="toast-close" type="button" aria-label="Close">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
